@@ -1,5 +1,15 @@
 <template>
-  <h1 class="text-red-500">Hello world</h1>
+  <HomeHeader />
+  <HomeMain />
+  <HomeFooter />
 </template>
 
-<script></script>
+<script>
+import HomeHeader from '../components/homepage/HomeHeader.vue'
+import HomeMain from '../components/homepage/HomeMain.vue'
+import HomeFooter from '../components/homepage/HomeFooter.vue'
+
+export default {
+  components: { HomeHeader, HomeMain, HomeFooter }
+}
+</script>
