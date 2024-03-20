@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import ArrowRight from '../../icons/ArrowRight.vue'
+import ArrowRight from '@/icons/ArrowRight.vue'
 export default {
   props: {
     mode: {

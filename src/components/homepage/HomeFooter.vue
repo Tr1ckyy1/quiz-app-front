@@ -1,7 +1,7 @@
 <template>
   <footer class="sm:z-20 sm:bg-white">
     <section
-      class="px-14 py-4 justify-between items-center space-y-8 sm:flex sm:justify-start sm:gap-40 sm:items-start sm:space-y-0"
+      class="px-14 py-4 justify-between items-center space-y-8 sm:flex sm:justify-start sm:gap-40 sm:items-start sm:space-y-0 sm:px-24 sm:py-10"
     >
       <div class="border-b py-4 sm:border-none sm:py-0">
         <QuizIcon />
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import QuizIcon from '../../icons/QuizIcon.vue'
+import QuizIcon from '@/icons/QuizIcon.vue'
 
 export default {
   components: { QuizIcon }
