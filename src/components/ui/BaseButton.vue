@@ -2,12 +2,7 @@
   <button v-if="!link">
     <slot></slot>
   </button>
-  <RouterLink
-    v-else
-    :to="to"
-    class="rounded-md px-10 py-3.5 font-raleway font-bold"
-    :class="customized"
-  >
+  <RouterLink v-else :to="to" class="font-raleway font-bold" :class="customized">
     <slot></slot>
     <ArrowRight
       v-if="mode === 'login'"
@@ -40,7 +35,7 @@ export default {
   computed: {
     customized() {
       if (this.mode === 'signup')
-        return 'bg-black border border-black duration-500 text-white hover:-translate-x-2 hover:-translate-y-2 hover:shadow-[6px_5px_2px_0_black] hover:bg-white hover:text-black'
+        return 'rounded-md px-10 py-3.5 bg-black border border-black duration-500 text-white hover:-translate-x-2 hover:-translate-y-2 hover:shadow-[6px_5px_2px_0_black] hover:bg-white hover:text-black'
 
       if (this.mode === 'login')
         return 'text-blue-main flex gap-2 items-center peer duration-300 group'

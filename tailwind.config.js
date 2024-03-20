@@ -12,7 +12,8 @@ export default {
       },
       colors: {
         'blue-main': '#4B69FD',
-        'red-main': '#FF5613'
+        'red-main': '#FF5613',
+        'footer-grey': '#475467'
       }
     }
   },
