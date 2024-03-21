@@ -1,5 +1,5 @@
 <template>
-  <button v-if="!link">
+  <button v-if="!link" :class="customized">
     <slot></slot>
   </button>
   <RouterLink v-else :to="to" class="font-raleway font-bold" :class="customized">
@@ -39,6 +39,10 @@ export default {
 
       if (this.mode === 'login')
         return 'text-blue-main flex gap-2 items-center peer duration-300 group'
+
+      if (this.mode === 'authButton')
+        return 'bg-black w-full border-black border text-white py-4 rounded-xl font-bold hover:bg-white hover:text-black duration-300'
+
       return ''
     }
   }
