@@ -24,12 +24,12 @@
         <BaseButton link to="/auth/login" mode="login">Log in</BaseButton>
       </div>
 
-      <div v-else class="flex items-center sm:gap-8" :class="{ 'w-full  sm:w-fit': inputFocused }">
+      <div v-else class="flex items-center gap-8" :class="{ 'w-full  sm:w-fit': inputFocused }">
         <div class="flex items-center relative" :class="focusedInputWidth">
           <input
             id="search"
             type="text"
-            class="peer outline-none px-8 focus:px-10 group focus:ring-1 focus:ring-[#D0D5DD] w-full rounded-lg focus:bg-[#F9FAFB] py-2"
+            class="peer outline-none px-8 focus:px-10 group focus:ring-1 focus:ring-[#D0D5DD] w-full rounded-lg focus:bg-[#F9FAFB] py-2 border"
             placeholder="Search"
             @focus="focusInput"
             @blur="blurInput"
