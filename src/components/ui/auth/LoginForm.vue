@@ -1,5 +1,10 @@
 <template>
-  <AuthModal title="Hi, Welcome!" description="Don't have an account?" descr-span="Sign up">
+  <AuthModal
+    :route="routeTo"
+    title="Hi, Welcome!"
+    description="Don't have an account?"
+    descr-span="Sign up"
+  >
     <Form @submit="onSubmit" class="space-y-6">
       <BaseInput
         name="email"
@@ -49,9 +54,9 @@
           </div>
           <label for="remember-check" class="text-sm">Remember for 30 days</label>
         </div>
-        <RouterLink to="/">
-          <p class="text-sm">Forgot password?</p>
-        </RouterLink>
+
+        <RouterLink v-if="routeTo" to="/auth/forgot">Forgot password?</RouterLink>
+        <button type="button" v-else class="text-sm">Forgot password?</button>
       </div>
 
       <BaseButton mode="authButton">Log in</BaseButton>
@@ -65,6 +70,12 @@ import BaseInput from '@/components/ui/BaseInput.vue'
 import { Form, Field } from 'vee-validate'
 
 export default {
+  props: {
+    routeTo: {
+      type: String,
+      required: false
+    }
+  },
   components: {
     AuthModal,
     BaseInput,

@@ -1,5 +1,10 @@
 <template>
-  <AuthModal title="Create Account" description="Already have an account?" descr-span="Log in">
+  <AuthModal
+    :route="routeTo"
+    title="Create account"
+    description="Already have an account?"
+    descr-span="Log in"
+  >
     <Form @submit="onSubmit" class="space-y-6">
       <BaseInput
         name="username"
@@ -56,7 +61,7 @@
         <label for="accept-terms" class="text-sm">I accept the terms and privacy policy</label>
       </div>
 
-      <BaseButton mode="authButton">Log in</BaseButton>
+      <BaseButton mode="authButton">Sign up</BaseButton>
     </Form>
   </AuthModal>
 </template>
@@ -66,6 +71,12 @@ import AuthModal from './AuthModal.vue'
 import BaseInput from '@/components/ui/BaseInput.vue'
 import { Form, Field } from 'vee-validate'
 export default {
+  props: {
+    routeTo: {
+      type: String,
+      required: false
+    }
+  },
   components: {
     AuthModal,
     BaseInput,
