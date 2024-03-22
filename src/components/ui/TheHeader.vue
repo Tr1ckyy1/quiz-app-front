@@ -1,6 +1,6 @@
 <template>
   <header class="p-4 border-b sticky top-0 w-full bg-white z-50 sm:px-24 sm:py-6">
-    <nav class="flex justify-between items-center">
+    <nav class="flex justify-between items-center h-8 sm:h-12">
       <div class="flex items-center gap-20">
         <div class="sm:hidden">
           <RouterLink v-if="!inputFocused" to="/" @click="scrollToTop">
@@ -18,12 +18,18 @@
           <h1>Quizzes</h1>
         </RouterLink>
       </div>
-      <div class="flex items-center gap-8" :class="{ 'w-full  sm:w-96': inputFocused }">
+
+      <div v-if="$route.name === 'home'" class="hidden sm:flex items-center gap-10">
+        <BaseButton link to="/auth/signup" mode="signup">Sign up</BaseButton>
+        <BaseButton link to="/auth/login" mode="login">Log in</BaseButton>
+      </div>
+
+      <div v-else class="flex items-center gap-8" :class="{ 'w-full  sm:w-fit': inputFocused }">
         <div class="flex items-center relative" :class="focusedInputWidth">
           <input
             id="search"
             type="text"
-            class="peer outline-none px-8 focus:px-10 group focus:border focus:border-[#D0D5DD] w-full rounded-lg focus:bg-[#F9FAFB] py-2"
+            class="peer outline-none px-8 focus:px-10 group focus:ring-1 focus:ring-[#D0D5DD] w-full rounded-lg focus:bg-[#F9FAFB] py-2 border"
             placeholder="Search"
             @focus="focusInput"
             @blur="blurInput"
@@ -33,7 +39,7 @@
             <SearchIcon />
           </label>
           <div
-            @click="blurInput"
+            @mousedown="cancelInput"
             v-if="inputFocused"
             class="absolute right-0 border-l border-[#D0D5DD] h-full flex items-center justify-center px-2.5 cursor-pointer"
           >
@@ -49,6 +55,7 @@
           <Avatar />
         </div>
       </div>
+      <BurgerMenuIcon v-if="$route.name === 'home'" class="sm:hidden" />
     </nav>
   </header>
 </template>
@@ -71,10 +78,10 @@ export default {
 
   computed: {
     focusedInputWidth() {
-      return this.inputFocused ? 'w-full duration-150 transition-all' : 'w-32'
+      return this.inputFocused ? 'w-full duration-150 transition-all sm:w-96' : 'w-32'
     },
     activeQuizPage() {
-      return this.$route.path === '/quizzes'
+      return this.$route.name === 'quizzes'
     }
   },
   methods: {
@@ -83,10 +90,13 @@ export default {
     },
     focusInput() {
       this.inputFocused = true
-      console.log(this.$route)
     },
     blurInput() {
       this.inputFocused = false
+    },
+    cancelInput() {
+      this.search = ''
+      this.blurInput()
     }
   }
 }
