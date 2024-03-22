@@ -41,7 +41,7 @@ export default {
         return 'text-blue-main flex gap-2 items-center peer duration-300 group'
 
       if (this.mode === 'authButton')
-        return 'bg-black w-full border-black border text-white py-4 rounded-xl font-bold hover:bg-white hover:text-black duration-300'
+        return 'block text-center bg-black w-full border-black border text-white py-4 rounded-xl font-bold hover:bg-white hover:text-black duration-300'
 
       return ''
     }

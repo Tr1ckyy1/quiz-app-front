@@ -1,5 +1,10 @@
 <template>
   <header class="p-4 border-b sticky top-0 w-full bg-white z-50 sm:px-24 sm:py-6">
+    <MenuFunctionality
+      @open="openMenuModal"
+      @close="closeMenuModal"
+      :menuModalOpen="menuModalOpen"
+    />
     <nav class="flex justify-between items-center h-8 sm:h-12">
       <div class="flex items-center gap-20">
         <div class="sm:hidden">
@@ -29,7 +34,7 @@
           <input
             id="search"
             type="text"
-            class="peer outline-none px-8 focus:px-10 group focus:ring-1 focus:ring-[#D0D5DD] w-full rounded-lg focus:bg-[#F9FAFB] py-2 border"
+            class="peer outline-none px-8 focus:px-10 group focus:ring-1 focus:ring-[#D0D5DD] w-full rounded-lg focus:bg-[#F9FAFB] py-2"
             placeholder="Search"
             @focus="focusInput"
             @blur="blurInput"
@@ -46,7 +51,7 @@
             <CancelIcon />
           </div>
         </div>
-        <div class="sm:hidden" v-if="!inputFocused">
+        <div @click="openMenuModal" class="sm:hidden" v-if="!inputFocused">
           <BurgerMenuIcon />
         </div>
         <div
@@ -55,7 +60,9 @@
           <Avatar />
         </div>
       </div>
-      <BurgerMenuIcon v-if="$route.name === 'home'" class="sm:hidden" />
+      <div @click="openMenuModal" class="sm:hidden" v-if="$route.name === 'home'">
+        <BurgerMenuIcon />
+      </div>
     </nav>
   </header>
 </template>
@@ -66,13 +73,15 @@ import BurgerMenuIcon from '@/icons/BurgerMenuIcon.vue'
 import SearchIcon from '@/icons/SearchIcon.vue'
 import CancelIcon from '@/icons/CancelIcon.vue'
 import Avatar from '@/icons/Avatar.vue'
+import MenuFunctionality from './MenuFunctionality.vue'
 
 export default {
-  components: { QuizIcon, BurgerMenuIcon, SearchIcon, CancelIcon, Avatar },
+  components: { QuizIcon, BurgerMenuIcon, SearchIcon, CancelIcon, Avatar, MenuFunctionality },
   data() {
     return {
       inputFocused: false,
-      search: ''
+      search: '',
+      menuModalOpen: false
     }
   },
 
@@ -97,6 +106,12 @@ export default {
     cancelInput() {
       this.search = ''
       this.blurInput()
+    },
+    openMenuModal() {
+      this.menuModalOpen = true
+    },
+    closeMenuModal() {
+      this.menuModalOpen = false
     }
   }
 }
