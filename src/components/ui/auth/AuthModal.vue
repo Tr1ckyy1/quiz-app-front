@@ -1,12 +1,12 @@
 <template>
-  <section class="py-14 px-6 space-y-10">
+  <section class="py-14 px-6 space-y-10 bg-white">
     <div class="text-center space-y-6">
       <h1 class="font-bold text-2xl font-raleway">{{ title }}</h1>
       <p>
         {{ description }}
-        <RouterLink v-if="route" :to="route">
+        <button @click="swap">
           <span class="text-blue-main font-bold">{{ descrSpan }}</span>
-        </RouterLink>
+        </button>
       </p>
     </div>
     <slot></slot>
@@ -29,12 +29,8 @@ export default {
       type: String,
       required: false,
       default: ''
-    },
-    route: {
-      type: String,
-      required: false,
-      default: ''
     }
-  }
+  },
+  inject: ['swap']
 }
 </script>
