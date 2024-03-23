@@ -1,8 +1,8 @@
 <template>
   <section class="flex gap-20 justify-center sm:justify-start">
-    <img src="@/assets/create-logo.png" class="hidden sm:block object-cover h-screen" />
+    <img src="@/assets/create-logo.png" class="hidden sm:block" />
 
-    <div class="w-full max-w-[34rem] pt-10">
+    <div class="w-full max-w-[34rem] py-14">
       <button class="flex items-center px-6" @click="$router.go(-1)">
         <GoBack />
         <h1>Back</h1>

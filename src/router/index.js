@@ -4,6 +4,7 @@ import Quizzes from '@/views/Quizzes.vue'
 import Authorization from '@/views/Authorization.vue'
 import Signup from '@/components/auth/Signup.vue'
 import Login from '@/components/auth/Login.vue'
+import Forgot from '@/components/auth/Forgot.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,10 @@ const router = createRouter({
         {
           path: 'login',
           component: Login
+        },
+        {
+          path: 'forgot',
+          component: Forgot
         }
       ]
     }

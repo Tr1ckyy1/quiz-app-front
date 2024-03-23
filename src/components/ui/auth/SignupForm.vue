@@ -5,13 +5,14 @@
     description="Already have an account?"
     descr-span="Log in"
   >
-    <Form @submit="onSubmit" class="space-y-6">
+    <Form @submit="onSubmit" class="space-y-4" :validation-schema="schema" v-slot="{ errors }">
       <BaseInput
         name="username"
         title="Username"
         placeholder="Your username"
         type="text"
         id="signup-username"
+        :error="errors.username"
       />
       <BaseInput
         name="email"
@@ -19,6 +20,7 @@
         placeholder="Example@gmail.com"
         type="email"
         id="signup-email"
+        :error="errors.email"
       />
       <BaseInput
         name="password"
@@ -26,6 +28,7 @@
         placeholder="must be 8 characters"
         type="password"
         id="signup-password"
+        :error="errors.password"
       />
       <BaseInput
         name="confirmPassword"
@@ -33,6 +36,7 @@
         placeholder="must be 8 characters"
         type="password"
         id="signup-confirm-password"
+        :error="errors.confirmPassword"
       />
 
       <div class="flex gap-3 items-center">
@@ -70,7 +74,31 @@
 import AuthModal from './AuthModal.vue'
 import BaseInput from '@/components/ui/BaseInput.vue'
 import { Form, Field } from 'vee-validate'
+import * as yup from 'yup'
+
 export default {
+  data() {
+    const schema = yup.object().shape({
+      username: yup
+        .string()
+        .trim()
+        .required('Username is required')
+        .min(3, 'Must be at least 3 characters'),
+      email: yup.string().required('Email is required').email('Must be a valid email address'),
+      password: yup
+        .string()
+        .trim()
+        .required('Password is required')
+        .min(3, 'Must be at least 3 characters'),
+
+      confirmPassword: yup
+        .string()
+        .required('Confirm password')
+        .oneOf([yup.ref('password')], 'Passwords do not match')
+    })
+
+    return { schema }
+  },
   props: {
     routeTo: {
       type: String,
