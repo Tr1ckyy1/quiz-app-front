@@ -27,10 +27,10 @@
     </div>
   </Transition>
   <Modal @close="closeSignupModal" :modalExists="signupModalShowing" name="auth">
-    <SignupModal />
+    <SignupForm />
   </Modal>
   <Modal @close="closeLoginModal" :modalExists="loginModalShowing" name="auth">
-    <LoginModal />
+    <LoginForm />
   </Modal>
 </template>
 
@@ -38,13 +38,13 @@
 import Modal from './Modal.vue'
 import CancelIcon from '@/icons/CancelIcon.vue'
 import QuizIcon from '@/icons/QuizIcon.vue'
-import SignupModal from '@/components/ui/auth/SignupModal.vue'
-import LoginModal from '@/components/ui/auth/LoginModal.vue'
+import SignupForm from '@/components/ui/auth/SignupForm.vue'
+import LoginForm from '@/components/ui/auth/LoginForm.vue'
 
 export default {
   emits: ['close', 'open'],
   props: ['menuModalOpen'],
-  components: { Modal, CancelIcon, QuizIcon, SignupModal, LoginModal },
+  components: { Modal, CancelIcon, QuizIcon, SignupForm, LoginForm },
   data() {
     return {
       signupModalShowing: false,
