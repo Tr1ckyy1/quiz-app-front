@@ -5,6 +5,8 @@ import Authorization from '@/views/Authorization.vue'
 import Signup from '@/components/auth/Signup.vue'
 import Login from '@/components/auth/Login.vue'
 import Forgot from '@/components/auth/Forgot.vue'
+import TheHeader from '@/components/ui/TheHeader.vue'
+import TheFooter from '@/components/ui/TheFooter.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,12 +14,20 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      components: {
+        default: HomeView,
+        header: TheHeader,
+        footer: TheFooter
+      }
     },
     {
       path: '/quizzes',
       name: 'quizzes',
-      component: Quizzes
+      components: {
+        header: TheHeader,
+        default: Quizzes,
+        footer: TheFooter
+      }
     },
     {
       path: '/auth',

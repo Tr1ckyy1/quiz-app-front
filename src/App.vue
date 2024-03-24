@@ -1,13 +1,15 @@
 <template>
-  <TheHeader v-if="!$route.path.includes('auth')" />
+  <RouterView :isHomePage="isHomePage" name="header" />
   <RouterView />
-  <HomeFooter v-if="!$route.path.includes('auth')" />
+  <RouterView name="footer" />
 </template>
 
 <script>
-import TheHeader from '@/components/ui/TheHeader.vue'
-import HomeFooter from '@/components/ui/TheFooter.vue'
 export default {
-  components: { TheHeader, HomeFooter }
+  computed: {
+    isHomePage() {
+      return this.$route.name === 'home'
+    }
+  }
 }
 </script>
