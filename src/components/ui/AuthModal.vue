@@ -1,19 +1,19 @@
 <template>
-  <section class="py-14 px-6 space-y-10 bg-white min-h-full">
+  <section class="py-14 px-6 space-y-10 bg-white">
     <div class="text-center space-y-6 sm:text-left">
       <h1 class="font-extrabold text-2xl font-raleway sm:text-4xl">{{ title }}</h1>
 
       <p class="block" :class="{ 'sm:hidden': !title.includes('Forgot') }">
         {{ description }}
-        <button class="text-blue-main font-bold" @click="swap">
+        <RouterLink :to="goTo" class="text-blue-main font-bold">
           {{ descrSpan }}
-        </button>
+        </RouterLink>
       </p>
     </div>
     <slot></slot>
     <p v-if="!title.includes('Forgot')" class="hidden sm:block">
       {{ description }}
-      <RouterLink v-if="route" :to="route" class="text-blue-main font-bold">
+      <RouterLink :to="goTo" class="text-blue-main font-bold">
         {{ descrSpan }}
       </RouterLink>
     </p>
@@ -31,19 +31,18 @@ export default {
       type: String,
       required: true
     },
-
     descrSpan: {
       type: String,
       required: false,
       default: ''
-    },
-    route: {
-      type: String,
-      required: false
     }
   },
-  inject: {
-    swap: { default: null }
+  computed: {
+    goTo() {
+      return this.descrSpan.replaceAll(' ', '').toLowerCase() === 'signup'
+        ? '/auth/signup'
+        : '/auth/login'
+    }
   }
 }
 </script>
