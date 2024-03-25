@@ -28,18 +28,18 @@
           <BaseInput
             name="password"
             title="Create a password"
-            placeholder="must be 8 characters"
+            placeholder="Must be 3 characters"
             type="password"
             id="signup-password"
             :error="errors.password"
           />
           <BaseInput
-            name="confirmPassword"
+            name="password_confirm"
             title="Confirm password"
-            placeholder="must be 8 characters"
+            placeholder="Must be 3 characters"
             type="password"
             id="signup-confirm-password"
-            :error="errors.confirmPassword"
+            :error="errors.password_confirm"
           />
 
           <div class="flex gap-3 items-center">
@@ -104,9 +104,9 @@ export default {
         .required('Password is required')
         .min(3, 'Must be at least 3 characters'),
 
-      confirmPassword: yup
+      password_confirm: yup
         .string()
-        .required('Confirm password')
+        .required('Confirm password is required')
         .oneOf([yup.ref('password')], 'Passwords do not match')
     })
 
