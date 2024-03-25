@@ -24,7 +24,7 @@
         </RouterLink>
       </div>
 
-      <div v-if="$route.name === 'home'" class="hidden sm:flex items-center gap-10">
+      <div v-if="isHomePage" class="hidden sm:flex items-center gap-10">
         <BaseButton link to="/auth/signup" mode="signup">Sign up</BaseButton>
         <BaseButton link to="/auth/login" mode="login">Log in</BaseButton>
       </div>
@@ -76,6 +76,7 @@ import Avatar from '@/icons/Avatar.vue'
 import MenuFunctionality from './MenuFunctionality.vue'
 
 export default {
+  props: ['isHomePage'],
   components: { QuizIcon, BurgerMenuIcon, SearchIcon, CancelIcon, Avatar, MenuFunctionality },
   data() {
     return {

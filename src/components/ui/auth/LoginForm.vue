@@ -5,13 +5,14 @@
     description="Don't have an account?"
     descr-span="Sign up"
   >
-    <Form @submit="onSubmit" class="space-y-6">
+    <Form @submit="onSubmit" class="space-y-4" :validation-schema="schema" v-slot="{ errors }">
       <BaseInput
         name="email"
         title="Email address"
         placeholder="Your email"
         type="email"
         id="login-email"
+        :error="errors.email"
       />
 
       <BaseInput
@@ -20,13 +21,7 @@
         placeholder="must be 8 characters"
         type="password"
         id="login-password"
-      />
-      <BaseInput
-        name="confirmPassword"
-        title="Confirm password"
-        placeholder="must be 8 characters"
-        type="password"
-        id="login-confirm-password"
+        :error="errors.password"
       />
 
       <div class="flex items-center justify-between">
@@ -56,7 +51,9 @@
         </div>
 
         <RouterLink v-if="routeTo" to="/auth/forgot">Forgot password?</RouterLink>
-        <button type="button" v-else class="text-sm">Forgot password?</button>
+        <button @click="forgotPasswordModal" type="button" v-else class="text-sm">
+          Forgot password?
+        </button>
       </div>
 
       <BaseButton mode="authButton">Log in</BaseButton>
@@ -68,8 +65,17 @@
 import AuthModal from './AuthModal.vue'
 import BaseInput from '@/components/ui/BaseInput.vue'
 import { Form, Field } from 'vee-validate'
+import * as yup from 'yup'
 
 export default {
+  data() {
+    const schema = {
+      email: yup.string().required('Email is required').email('Must be a valid email address'),
+      password: yup.string().required('Password is required')
+    }
+    return { schema }
+  },
+  emits: ['forgot-password'],
   props: {
     routeTo: {
       type: String,
@@ -86,6 +92,9 @@ export default {
   methods: {
     onSubmit(values) {
       console.log(values)
+    },
+    forgotPasswordModal() {
+      this.$emit('forgot-password')
     }
   }
 }

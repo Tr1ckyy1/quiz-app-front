@@ -1,20 +1,51 @@
 <template>
-  <div class="flex flex-col gap-2">
+  <div class="flex flex-col gap-2 relative h-[122px]">
     <label :for="id">{{ title }}</label>
     <Field
       :id="id"
-      :type="type"
+      :type="inputType"
       :placeholder="placeholder"
       :name="name"
       class="border p-4 outline-none rounded-xl"
+      :class="{ 'border-red-main': error }"
+      :validateOnInput="true"
+      :validateOnBlur="false"
+    />
+    <ErrorMessage class="text-red-500" :name="name" />
+    <ErrorIcon class="absolute right-4 top-1/2 -translate-y-1/2" v-if="error" />
+    <ShowIcon
+      @click="passwordIsVisible = true"
+      class="absolute right-4 top-1/2 -translate-y-1/2"
+      v-if="type === 'password' && !error"
+    />
+    <HideIcon
+      @click="passwordIsVisible = false"
+      class="absolute right-4 top-1/2 -translate-y-1/2"
+      v-if="passwordIsVisible && !error"
     />
   </div>
 </template>
 
 <script>
-import { Field } from 'vee-validate'
+import ErrorIcon from '@/icons/ErrorIcon.vue'
+import ShowIcon from '@/icons/ShowIcon.vue'
+import HideIcon from '@/icons/HideIcon.vue'
+import { Field, ErrorMessage } from 'vee-validate'
+
 export default {
-  components: { Field },
+  data() {
+    return {
+      passwordIsVisible: false
+    }
+  },
+  computed: {
+    inputType() {
+      if (this.type === 'password') return this.passwordIsVisible ? 'text' : 'password'
+      return this.type
+    }
+  },
+
+  components: { Field, ErrorMessage, ErrorIcon, ShowIcon, HideIcon },
   props: {
     title: {
       type: String,
@@ -35,12 +66,14 @@ export default {
       required: false,
       default: ''
     },
-
     id: {
       type: String,
       required: true
+    },
+    error: {
+      type: String,
+      required: false
     }
-  },
-  
+  }
 }
 </script>

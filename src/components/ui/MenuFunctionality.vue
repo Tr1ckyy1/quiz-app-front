@@ -30,7 +30,10 @@
     <SignupForm />
   </Modal>
   <Modal @close="closeLoginModal" :modalExists="loginModalShowing" name="auth">
-    <LoginForm />
+    <LoginForm @forgot-password="openForgotPasswordModal" />
+  </Modal>
+  <Modal @close="closeForgotPasswordModal" :modalExists="forgotPasswordModalShowing" name="auth">
+    <ForgotPasswordForm />
   </Modal>
 </template>
 
@@ -40,15 +43,17 @@ import CancelIcon from '@/icons/CancelIcon.vue'
 import QuizIcon from '@/icons/QuizIcon.vue'
 import SignupForm from '@/components/ui/auth/SignupForm.vue'
 import LoginForm from '@/components/ui/auth/LoginForm.vue'
+import ForgotPasswordForm from '@/components/ui/auth/ForgotPasswordForm.vue'
 
 export default {
   emits: ['close', 'open'],
   props: ['menuModalOpen'],
-  components: { Modal, CancelIcon, QuizIcon, SignupForm, LoginForm },
+  components: { Modal, CancelIcon, QuizIcon, SignupForm, LoginForm, ForgotPasswordForm },
   data() {
     return {
       signupModalShowing: false,
-      loginModalShowing: false
+      loginModalShowing: false,
+      forgotPasswordModalShowing: false
     }
   },
   methods: {
@@ -63,6 +68,7 @@ export default {
       this.closeModal()
       this.loginModalShowing = true
     },
+
     closeSignupModal() {
       this.signupModalShowing = false
       this.$emit('open')
@@ -70,6 +76,14 @@ export default {
     closeLoginModal() {
       this.loginModalShowing = false
       this.$emit('open')
+    },
+    openForgotPasswordModal() {
+      this.loginModalShowing = false
+      this.forgotPasswordModalShowing = true
+    },
+    closeForgotPasswordModal() {
+      this.forgotPasswordModalShowing = false
+      this.loginModalShowing = true
     },
 
     swap() {
