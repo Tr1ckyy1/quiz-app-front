@@ -1,10 +1,6 @@
 <template>
   <header class="p-4 border-b sticky top-0 w-full bg-white z-50 sm:px-24 sm:py-6">
-    <MenuFunctionality
-      @open="openMenuModal"
-      @close="closeMenuModal"
-      :menuModalOpen="menuModalOpen"
-    />
+    <MenuFunctionality @close="closeMenuModal" :menuModalOpen="menuModalOpen" />
     <nav class="flex justify-between items-center h-8 sm:h-12">
       <div class="flex items-center gap-20">
         <div class="sm:hidden">

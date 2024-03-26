@@ -12,92 +12,36 @@
         <CancelIcon @click="closeModal" />
       </div>
       <h1 class="py-5 border-y text-xl font-bold my-8">Quizzes</h1>
-      <button
-        @click="openSignupModal"
-        class="rounded-[4px] py-3 bg-black w-full text-white font-bold mb-6"
+      <RouterLink
+        to="/auth/signup"
+        class="block rounded-[4px] py-3 bg-black w-full text-white font-bold mb-6 text-center"
       >
         Sign up
-      </button>
-      <button
-        @click="openLoginModal"
-        class="rounded-[4px] py-3 text-blue-main w-full bg-[#F6F6F7] font-bold"
+      </RouterLink>
+      <RouterLink
+        to="/auth/login"
+        class="block rounded-[4px] py-3 text-blue-main w-full bg-[#F6F6F7] font-bold text-center"
       >
         Log in
-      </button>
+      </RouterLink>
     </div>
   </Transition>
-  <Modal @close="closeSignupModal" :modalExists="signupModalShowing" name="auth">
-    <SignupForm />
-  </Modal>
-  <Modal @close="closeLoginModal" :modalExists="loginModalShowing" name="auth">
-    <LoginForm @forgot-password="openForgotPasswordModal" />
-  </Modal>
-  <Modal @close="closeForgotPasswordModal" :modalExists="forgotPasswordModalShowing" name="auth">
-    <ForgotPasswordForm />
-  </Modal>
 </template>
 
 <script>
 import Modal from './Modal.vue'
 import CancelIcon from '@/icons/CancelIcon.vue'
 import QuizIcon from '@/icons/QuizIcon.vue'
-import SignupForm from '@/components/ui/auth/SignupForm.vue'
-import LoginForm from '@/components/ui/auth/LoginForm.vue'
-import ForgotPasswordForm from '@/components/ui/auth/ForgotPasswordForm.vue'
 
 export default {
-  emits: ['close', 'open'],
+  emits: ['close'],
   props: ['menuModalOpen'],
-  components: { Modal, CancelIcon, QuizIcon, SignupForm, LoginForm, ForgotPasswordForm },
-  data() {
-    return {
-      signupModalShowing: false,
-      loginModalShowing: false,
-      forgotPasswordModalShowing: false
-    }
-  },
+  components: { Modal, CancelIcon, QuizIcon },
+
   methods: {
     closeModal() {
       this.$emit('close')
-    },
-    openSignupModal() {
-      this.closeModal()
-      this.signupModalShowing = true
-    },
-    openLoginModal() {
-      this.closeModal()
-      this.loginModalShowing = true
-    },
-
-    closeSignupModal() {
-      this.signupModalShowing = false
-      this.$emit('open')
-    },
-    closeLoginModal() {
-      this.loginModalShowing = false
-      this.$emit('open')
-    },
-    openForgotPasswordModal() {
-      this.loginModalShowing = false
-      this.forgotPasswordModalShowing = true
-    },
-    closeForgotPasswordModal() {
-      this.forgotPasswordModalShowing = false
-      this.loginModalShowing = true
-    },
-
-    swap() {
-      if (this.loginModalShowing) {
-        this.signupModalShowing = true
-        this.loginModalShowing = false
-      } else if (this.signupModalShowing) {
-        this.signupModalShowing = false
-        this.loginModalShowing = true
-      }
     }
-  },
-  provide() {
-    return { swap: this.swap }
   }
 }
 </script>
