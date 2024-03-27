@@ -34,38 +34,43 @@
             :error="errors.password"
           />
           <BaseInput
-            name="password_confirm"
+            name="password_confirmation"
             title="Confirm password"
             placeholder="Must be 3 characters"
             type="password"
             id="signup-confirm-password"
-            :error="errors.password_confirm"
+            :error="errors.password_confirmation"
           />
 
-          <div class="flex gap-3 items-center">
-            <div class="relative flex items-center">
-              <Field
-                :value="true"
-                type="checkbox"
-                name="accept-terms"
-                id="accept-terms"
-                class="appearance-none w-5 h-5 rounded-full border checked:bg-black"
-              />
-              <label for="accept-terms">
-                <svg
-                  class="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 13 11"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M3 3.5L5 7L10.5 1.5" stroke="white" stroke-width="2" />
-                </svg>
-              </label>
-            </div>
+          <div class="h-14">
+            <div class="flex gap-3 items-center">
+              <div class="relative flex items-center">
+                <Field
+                  :value="true"
+                  type="checkbox"
+                  name="accept_terms"
+                  id="accept_terms"
+                  class="appearance-none w-5 h-5 rounded-full border checked:bg-black"
+                />
+                <label for="accept_terms">
+                  <svg
+                    class="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 13 11"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M3 3.5L5 7L10.5 1.5" stroke="white" stroke-width="2" />
+                  </svg>
+                </label>
+              </div>
 
-            <label for="accept-terms" class="text-sm">I accept the terms and privacy policy</label>
+              <label for="accept_terms" class="text-sm"
+                >I accept the terms and privacy policy</label
+              >
+            </div>
+            <ErrorMessage name="accept_terms" class="block text-red-main mt-2" />
           </div>
 
           <BaseButton mode="authButton">Sign up</BaseButton>
@@ -78,9 +83,10 @@
 <script>
 import AuthModal from '@/components/ui/AuthModal.vue'
 import BaseInput from '@/components/ui/BaseInput.vue'
-import { Form, Field } from 'vee-validate'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import * as yup from 'yup'
 import GoBack from '@/icons/GoBack.vue'
+import { signup } from '@/services/auth.js'
 
 export default {
   components: {
@@ -88,6 +94,7 @@ export default {
     BaseInput,
     Form,
     Field,
+    ErrorMessage,
     GoBack
   },
   data() {
@@ -103,18 +110,25 @@ export default {
         .trim()
         .required('Password is required')
         .min(3, 'Must be at least 3 characters'),
-
-      password_confirm: yup
+      password_confirmation: yup
         .string()
         .required('Confirm password is required')
-        .oneOf([yup.ref('password')], 'Passwords do not match')
+        .oneOf([yup.ref('password')], 'Passwords do not match'),
+      accept_terms: yup.boolean().required('The accept terms field must be accepted')
     })
 
     return { schema }
   },
   methods: {
-    onSubmit(values) {
-      console.log(values)
+    async onSubmit(values, { resetForm, setFieldError }) {
+      try {
+        await signup(values)
+        resetForm()
+      } catch ({ errorMessages }) {
+        for (const fieldName in errorMessages) {
+          setFieldError(fieldName, errorMessages[fieldName])
+        }
+      }
     }
   }
 }
