@@ -99,22 +99,22 @@ export default {
   },
   data() {
     const schema = yup.object().shape({
-      // username: yup
-      //   .string()
-      //   .trim()
-      //   .required('Username is required')
-      //   .min(3, 'Must be at least 3 characters'),
-      // email: yup.string().required('Email is required').email('Must be a valid email address'),
-      // password: yup
-      //   .string()
-      //   .trim()
-      //   .required('Password is required')
-      //   .min(3, 'Must be at least 3 characters'),
-      // password_confirmation: yup
-      //   .string()
-      //   .required('Confirm password is required')
-      //   .oneOf([yup.ref('password')], 'Passwords do not match'),
-      // accept_terms: yup.boolean().required('The accept terms field must be accepted')
+      username: yup
+        .string()
+        .trim()
+        .required('Username is required')
+        .min(3, 'Must be at least 3 characters'),
+      email: yup.string().required('Email is required').email('Must be a valid email address'),
+      password: yup
+        .string()
+        .trim()
+        .required('Password is required')
+        .min(3, 'Must be at least 3 characters'),
+      password_confirmation: yup
+        .string()
+        .required('Confirm password is required')
+        .oneOf([yup.ref('password')], 'Passwords do not match'),
+      accept_terms: yup.boolean().required('The accept terms field must be accepted')
     })
 
     return { schema }
