@@ -1,5 +1,7 @@
+import { API_URL } from '../api'
+
 export async function signup(data) {
-  const res = await fetch('http://127.0.0.1:8000/api/signup', {
+  const res = await fetch(`${API_URL}/signup`, {
     method: 'POST',
     headers: {
       accept: 'application/json',
