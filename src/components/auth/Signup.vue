@@ -1,7 +1,12 @@
 <template>
   <section class="flex gap-20 justify-center sm:justify-start">
+    <ToastMessage
+      :isShowing="toast.isShowing"
+      :type="toast.type"
+      :action="toast.action"
+      :text="toast.text"
+    />
     <img src="@/assets/create-logo.png" class="hidden sm:block" />
-
     <div class="w-full max-w-[34rem] py-14">
       <button class="flex items-center px-6" @click="$router.go(-1)">
         <GoBack />
@@ -86,7 +91,7 @@ import BaseInput from '@/components/ui/BaseInput.vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import * as yup from 'yup'
 import GoBack from '@/icons/GoBack.vue'
-import { signup } from '@/services/auth.js'
+import { signup } from '@/services/api/auth.js'
 
 export default {
   components: {
@@ -117,13 +122,29 @@ export default {
       accept_terms: yup.boolean().required('The accept terms field must be accepted')
     })
 
-    return { schema }
+    return {
+      schema,
+      toast: {
+        isShowing: false,
+        type: '',
+        text: '',
+        action: ''
+      }
+    }
   },
   methods: {
     async onSubmit(values, { resetForm, setFieldError }) {
       try {
         await signup(values)
         resetForm()
+        this.toast.isShowing = true
+        this.toast.type = 'success'
+        this.toast.text = `Created Successfully!`
+        this.toast.action = 'Please check your email address for verification'
+
+        setTimeout(() => {
+          this.toast.isShowing = false
+        }, 4000)
       } catch ({ errorMessages }) {
         for (const fieldName in errorMessages) {
           setFieldError(fieldName, errorMessages[fieldName])

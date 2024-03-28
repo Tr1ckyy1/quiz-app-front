@@ -13,7 +13,10 @@ export default {
       colors: {
         'blue-main': '#4B69FD',
         'red-main': '#FF5613',
-        'footer-grey': '#475467'
+        'footer-grey': '#475467',
+        'toast-green': '#01E17B',
+        'toast-yellow': '#FFD21F',
+        'toast-red': '#F04349'
       }
     }
   },

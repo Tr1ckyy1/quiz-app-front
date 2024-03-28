@@ -1,4 +1,4 @@
-import { API_URL } from '../api'
+import { API_URL } from '@/api'
 
 export async function signup(data) {
   const res = await fetch(`${API_URL}/signup`, {

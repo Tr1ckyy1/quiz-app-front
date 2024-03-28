@@ -20,13 +20,8 @@
         </RouterLink>
       </div>
 
-      <div v-if="isHomePage" class="hidden sm:flex items-center gap-10">
-        <BaseButton link to="/auth/signup" mode="signup">Sign up</BaseButton>
-        <BaseButton link to="/auth/login" mode="login">Log in</BaseButton>
-      </div>
-
-      <div v-else class="flex items-center gap-8" :class="{ 'w-full  sm:w-fit': inputFocused }">
-        <div class="flex items-center relative" :class="focusedInputWidth">
+      <div class="flex items-center gap-8" :class="{ 'w-full  sm:w-fit': inputFocused }">
+        <div v-if="!isHomePage" class="flex items-center relative" :class="focusedInputWidth">
           <input
             id="search"
             type="text"
@@ -50,14 +45,17 @@
         <div @click="openMenuModal" class="sm:hidden" v-if="!inputFocused">
           <BurgerMenuIcon />
         </div>
+
         <div
+          v-if="userLoggedIn"
           class="hidden sm:flex w-8 h-8 rounded-full border items-center justify-center cursor-pointer shrink-0"
         >
           <Avatar />
         </div>
-      </div>
-      <div @click="openMenuModal" class="sm:hidden" v-if="$route.name === 'home'">
-        <BurgerMenuIcon />
+        <div v-else class="hidden sm:flex items-center gap-10">
+          <BaseButton link to="/auth/signup" mode="signup">Sign up</BaseButton>
+          <BaseButton link to="/auth/login" mode="login">Log in</BaseButton>
+        </div>
       </div>
     </nav>
   </header>
@@ -78,7 +76,8 @@ export default {
     return {
       inputFocused: false,
       search: '',
-      menuModalOpen: false
+      menuModalOpen: false,
+      userLoggedIn: false // for now, before authorization is added
     }
   },
 
