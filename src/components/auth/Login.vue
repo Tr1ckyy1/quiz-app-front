@@ -2,6 +2,8 @@
   <section class="flex gap-20 justify-center sm:justify-start">
     <img src="@/assets/login-logo.png" class="hidden sm:block" />
 
+    <ToastMessage :toast="toast" />
+
     <div class="w-full max-w-[34rem] py-14">
       <button class="flex items-center px-6" @click="$router.go(-1)">
         <GoBack />
@@ -57,6 +59,14 @@
           </div>
 
           <BaseButton mode="authButton">Log in</BaseButton>
+          <BaseButton
+            type="button"
+            @click="resendVerification"
+            v-if="resendButton.isShowing"
+            mode="authButton"
+            :disabled="resendButton.isLoading"
+            >Resend verification</BaseButton
+          >
         </Form>
       </AuthModal>
     </div>
@@ -69,6 +79,7 @@ import BaseInput from '@/components/ui/BaseInput.vue'
 import { Form, Field } from 'vee-validate'
 import * as yup from 'yup'
 import GoBack from '@/icons/GoBack.vue'
+import { verifyUser, resend } from '@/services/api/auth'
 
 export default {
   components: { AuthModal, BaseInput, Form, Field, GoBack },
@@ -77,12 +88,81 @@ export default {
       email: yup.string().required('Email is required').email('Must be a valid email address'),
       password: yup.string().required('Password is required')
     }
-    return { schema }
+    return {
+      schema,
+      resendButton: {
+        isShowing: false,
+        isLoading: false
+      }
+    }
   },
+
   methods: {
     onSubmit(values) {
       console.log(values)
+    },
+    async resendVerification() {
+      const { id, expires } = this.$route.query
+      if (id && expires) {
+        try {
+          this.resendButton.isLoading = true
+          const data = await resend({ id, expires })
+          this.$store.dispatch('toast/setToast', {
+            type: data.type,
+            text: data.text,
+            message: data.message,
+            duration: data.duration
+          })
+
+          this.resendButton.isShowing = false
+        } catch (err) {
+          this.resendButton.isLoading = true
+
+          this.$store.dispatch('toast/setToast', {
+            type: 'error',
+            text: 'Error',
+            message: err.message,
+            duration: 5000
+          })
+
+          this.resendButton.isShowing = false
+        }
+        this.resendButton.isLoading = false
+      }
+    },
+    async sendVerificationRequest() {
+      const { id, hash, expires, signature } = this.$route.query
+      if (id && hash && expires && signature) {
+        try {
+          const data = await verifyUser({ id, hash, expires, signature })
+          this.$store.dispatch('toast/setToast', {
+            type: data.type,
+            text: data.text,
+            message: data.message,
+            duration: data.duration
+          })
+        } catch (err) {
+          this.$store.dispatch('toast/setToast', {
+            type: 'error',
+            text: 'Error',
+            message: err.message,
+            duration: 5000
+          })
+          if (err.message.includes('token')) {
+            this.resendButton.isShowing = true
+          }
+        }
+      }
     }
+  },
+
+  computed: {
+    toast() {
+      return this.$store.getters['toast/toastValues']
+    }
+  },
+  mounted() {
+    this.sendVerificationRequest()
   }
 }
 </script>

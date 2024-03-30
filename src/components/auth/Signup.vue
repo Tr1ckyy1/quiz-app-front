@@ -1,11 +1,6 @@
 <template>
   <section class="flex gap-20 justify-center sm:justify-start">
-    <ToastMessage
-      :isShowing="toast.isShowing"
-      :type="toast.type"
-      :action="toast.action"
-      :text="toast.text"
-    />
+    <ToastMessage :toast="toast" />
     <img src="@/assets/create-logo.png" class="hidden sm:block" />
     <div class="w-full max-w-[34rem] py-14">
       <button class="flex items-center px-6" @click="$router.go(-1)">
@@ -78,7 +73,7 @@
             <ErrorMessage name="accept_terms" class="block text-red-main mt-2" />
           </div>
 
-          <BaseButton mode="authButton">Sign up</BaseButton>
+          <BaseButton mode="authButton" :disabled="isLoading">Sign up</BaseButton>
         </Form>
       </AuthModal>
     </div>
@@ -124,32 +119,41 @@ export default {
 
     return {
       schema,
-      toast: {
-        isShowing: false,
-        type: '',
-        text: '',
-        action: ''
-      }
+      isLoading: false
+    }
+  },
+  computed: {
+    toast() {
+      return this.$store.getters['toast/toastValues']
     }
   },
   methods: {
     async onSubmit(values, { resetForm, setFieldError }) {
+      this.isLoading = true
       try {
         await signup(values)
         resetForm()
-        this.toast.isShowing = true
-        this.toast.type = 'success'
-        this.toast.text = `Created Successfully!`
-        this.toast.action = 'Please check your email address for verification'
-
-        setTimeout(() => {
-          this.toast.isShowing = false
-        }, 4000)
-      } catch ({ errorMessages }) {
-        for (const fieldName in errorMessages) {
-          setFieldError(fieldName, errorMessages[fieldName])
+        this.$store.dispatch('toast/setToast', {
+          type: 'success',
+          text: `Created Successfully!`,
+          message: 'Please check your email address for verification',
+          duration: 4000
+        })
+      } catch (error) {
+        if (!error.errorMessages) {
+          this.$store.dispatch('toast/setToast', {
+            type: 'error',
+            text: `Unexpected Error`,
+            message: error.message,
+            duration: 5000
+          })
+        } else {
+          for (const fieldName in error.errorMessages) {
+            setFieldError(fieldName, error.errorMessages[fieldName])
+          }
         }
       }
+      this.isLoading = false
     }
   }
 }
