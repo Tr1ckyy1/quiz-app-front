@@ -102,11 +102,11 @@ export default {
       console.log(values)
     },
     async resendVerification() {
-      const { id, expires } = this.$route.query
-      if (id && expires) {
+      const { id, hash, expires } = this.$route.query
+      if (id && hash && expires) {
         try {
           this.resendButton.isLoading = true
-          const data = await resend({ id, expires })
+          const data = await resend({ id, hash, expires })
           this.$store.dispatch('toast/setToast', {
             type: data.type,
             text: data.text,

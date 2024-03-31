@@ -33,14 +33,14 @@ export async function verifyUser({ id, hash, expires, signature }) {
   return data
 }
 
-export async function resend({ id, expires }) {
+export async function resend({ id, hash, expires }) {
   const res = await fetch(`${API_URL}/email/verification-notification`, {
     method: 'POST',
     headers: {
       accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ id, expires })
+    body: JSON.stringify({ id, hash, expires })
   })
   const data = await res.json()
   if (!res.ok) {
