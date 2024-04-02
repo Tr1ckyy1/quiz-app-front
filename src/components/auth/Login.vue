@@ -35,11 +35,11 @@
                 <Field
                   :value="true"
                   type="checkbox"
-                  name="remember-check"
-                  id="remember-check"
+                  name="remember"
+                  id="remember"
                   class="appearance-none w-5 h-5 rounded-full border checked:bg-black"
                 />
-                <label for="remember-check">
+                <label for="remember">
                   <svg
                     class="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
                     width="16"
@@ -52,13 +52,13 @@
                   </svg>
                 </label>
               </div>
-              <label for="remember-check" class="text-sm">Remember for 30 days</label>
+              <label for="remember" class="text-sm">Remember for 30 days</label>
             </div>
 
             <RouterLink to="/auth/forgot">Forgot password?</RouterLink>
           </div>
 
-          <BaseButton mode="authButton">Log in</BaseButton>
+          <BaseButton :disabled="loginLoading" mode="authButton">Log in</BaseButton>
           <BaseButton
             type="button"
             @click="resendVerification"
@@ -67,6 +67,7 @@
             :disabled="resendButton.isLoading"
             >Resend verification</BaseButton
           >
+          <button @click="goLogout" type="button" class="bg-red-400 p-20">Log out</button>
         </Form>
       </AuthModal>
     </div>
@@ -79,7 +80,7 @@ import BaseInput from '@/components/ui/BaseInput.vue'
 import { Form, Field } from 'vee-validate'
 import * as yup from 'yup'
 import GoBack from '@/icons/GoBack.vue'
-import { verifyUser, resend } from '@/services/api/auth'
+import { verifyUser, resend, login, logout } from '@/services/api/auth'
 
 export default {
   components: { AuthModal, BaseInput, Form, Field, GoBack },
@@ -93,13 +94,44 @@ export default {
       resendButton: {
         isShowing: false,
         isLoading: false
-      }
+      },
+      loginLoading: false
     }
   },
 
   methods: {
-    onSubmit(values) {
-      console.log(values)
+    async goLogout() {
+      try {
+        await logout()
+      } catch (err) {
+        this.$store.dispatch('toast/setToast', {
+          type: 'error',
+          text: `Unexpected Error`,
+          message: err.message,
+          duration: 5000
+        })
+      }
+    },
+    async onSubmit(values, { resetForm, setFieldError }) {
+      this.loginLoading = true
+      try {
+        await login(values)
+        resetForm()
+      } catch (error) {
+        if (!error.errorMessages) {
+          this.$store.dispatch('toast/setToast', {
+            type: 'error',
+            text: `Unexpected Error`,
+            message: error.message,
+            duration: 5000
+          })
+        } else {
+          for (const fieldName in error.errorMessages) {
+            setFieldError(fieldName, error.errorMessages[fieldName])
+          }
+        }
+      }
+      this.loginLoading = false
     },
     async resendVerification() {
       const { id, hash, expires } = this.$route.query

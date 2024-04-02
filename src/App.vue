@@ -1,6 +1,8 @@
 <template>
   <RouterView :isHomePage="isHomePage" name="header" />
-  <RouterView />
+  <main>
+    <RouterView />
+  </main>
   <RouterView name="footer" />
 </template>
 
