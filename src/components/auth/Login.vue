@@ -1,13 +1,15 @@
 <template>
   <section class="flex gap-20 justify-center sm:justify-start">
-    <img src="@/assets/login-logo.png" class="hidden sm:block" />
-
     <ToastMessage :toast="toast" />
+    <RouterLink class="absolute top-6 left-6 hidden sm:block" to="/">
+      <QuizIcon />
+    </RouterLink>
+    <img src="@/assets/login-logo.png" class="hidden sm:block object-cover min-h-screen" />
 
     <div class="w-full max-w-[34rem] py-14">
-      <button class="flex items-center px-6" @click="$router.go(-1)">
+      <button class="flex items-center px-6 hover:underline duration-100" @click="$router.go(-1)">
         <GoBack />
-        <h1>Back</h1>
+        <p>Back</p>
       </button>
       <AuthModal title="Hi, Welcome!" description="Don't have an account?" descr-span="Sign up">
         <Form @submit="onSubmit" class="space-y-4" :validation-schema="schema" v-slot="{ errors }">
@@ -67,7 +69,6 @@
             :disabled="resendButton.isLoading"
             >Resend verification</BaseButton
           >
-          <button @click="goLogout" type="button" class="bg-red-400 p-20">Log out</button>
         </Form>
       </AuthModal>
     </div>
@@ -77,13 +78,14 @@
 <script>
 import AuthModal from '@/components/ui/AuthModal.vue'
 import BaseInput from '@/components/ui/BaseInput.vue'
+import QuizIcon from '@/icons/QuizIcon.vue'
 import { Form, Field } from 'vee-validate'
 import * as yup from 'yup'
 import GoBack from '@/icons/GoBack.vue'
-import { verifyUser, resend, login, logout } from '@/services/api/auth'
+import { verifyUser, resend, login } from '@/services/api/auth'
 
 export default {
-  components: { AuthModal, BaseInput, Form, Field, GoBack },
+  components: { AuthModal, BaseInput, QuizIcon, Form, Field, GoBack },
   data() {
     const schema = {
       email: yup.string().required('Email is required').email('Must be a valid email address'),
@@ -100,87 +102,79 @@ export default {
   },
 
   methods: {
-    async goLogout() {
-      try {
-        await logout()
-      } catch (err) {
-        this.$store.dispatch('toast/setToast', {
-          type: 'error',
-          text: `Unexpected Error`,
-          message: err.message,
-          duration: 5000
-        })
-      }
-    },
     async onSubmit(values, { resetForm, setFieldError }) {
       this.loginLoading = true
       try {
         await login(values)
         resetForm()
+        this.$store.dispatch('auth/login')
+        this.$router.replace('/quizzes')
       } catch (error) {
-        if (!error.errorMessages) {
+        console.log(error)
+        if (!error.response?.data?.errors) {
           this.$store.dispatch('toast/setToast', {
             type: 'error',
             text: `Unexpected Error`,
-            message: error.message,
+            message: error.response?.data?.message ?? error.message,
             duration: 5000
           })
         } else {
-          for (const fieldName in error.errorMessages) {
-            setFieldError(fieldName, error.errorMessages[fieldName])
+          for (const fieldName in error.response.data.errors) {
+            setFieldError(fieldName, error.response.data.errors[fieldName])
           }
         }
+      } finally {
+        this.loginLoading = false
       }
-      this.loginLoading = false
     },
     async resendVerification() {
       const { id, hash, expires } = this.$route.query
       if (id && hash && expires) {
+        this.resendButton.isLoading = true
         try {
-          this.resendButton.isLoading = true
-          const data = await resend({ id, hash, expires })
+          const {
+            data: { type, text, message, duration }
+          } = await resend({ id, hash, expires })
           this.$store.dispatch('toast/setToast', {
-            type: data.type,
-            text: data.text,
-            message: data.message,
-            duration: data.duration
+            type: type,
+            text: text,
+            message: message,
+            duration: duration
           })
-
-          this.resendButton.isShowing = false
         } catch (err) {
-          this.resendButton.isLoading = true
-
           this.$store.dispatch('toast/setToast', {
             type: 'error',
             text: 'Error',
-            message: err.message,
+            message: err.response.data.message,
             duration: 5000
           })
-
+        } finally {
+          this.resendButton.isLoading = false
           this.resendButton.isShowing = false
         }
-        this.resendButton.isLoading = false
       }
     },
     async sendVerificationRequest() {
       const { id, hash, expires, signature } = this.$route.query
       if (id && hash && expires && signature) {
         try {
-          const data = await verifyUser({ id, hash, expires, signature })
+          const {
+            data: { type, text, message, duration }
+          } = await verifyUser({ id, hash, expires, signature })
           this.$store.dispatch('toast/setToast', {
-            type: data.type,
-            text: data.text,
-            message: data.message,
-            duration: data.duration
+            type: type,
+            text: text,
+            message: message,
+            duration: duration
           })
         } catch (err) {
           this.$store.dispatch('toast/setToast', {
             type: 'error',
             text: 'Error',
-            message: err.message,
+            message: err.response.data.message,
             duration: 5000
           })
-          if (err.message.includes('token')) {
+          if (err.response.data.message.includes('token')) {
             this.resendButton.isShowing = true
           }
         }

@@ -1,6 +1,11 @@
 <template>
   <header class="p-4 border-b sticky top-0 w-full bg-white z-50 sm:px-24 sm:py-6">
-    <MenuFunctionality @close="closeMenuModal" :menuModalOpen="menuModalOpen" />
+    <MenuFunctionality
+      @close="closeMenuModal"
+      :menuModalOpen="menuModalOpen"
+      :userLoggedIn="userLoggedIn"
+      @logUserOut="logout"
+    />
     <nav class="flex justify-between items-center h-8 sm:h-12">
       <div class="flex items-center gap-20">
         <div class="sm:hidden">
@@ -47,10 +52,37 @@
         </div>
 
         <div
+          @click="openCredentials"
           v-if="userLoggedIn"
-          class="hidden sm:flex w-8 h-8 rounded-full border items-center justify-center cursor-pointer shrink-0"
+          class="hidden sm:flex w-8 h-8 rounded-full border items-center justify-center cursor-pointer shrink-0 relative"
         >
           <Avatar />
+          <Transition
+            enter-active-class="duration-100 ease-in-out"
+            leave-active-class="duration-100 ease-in-out"
+            enter-from-class="scale-75"
+            leave-to-class="scale-75"
+          >
+            <div
+              v-if="credentialsOpen"
+              class="absolute border cursor-default border-[#D0D5DD] bg-white right-0 top-0 rounded-lg z-50 shadow-md p-8 space-y-5"
+            >
+              <div class="w-10 h-10 bg-gray-500 rounded-full shrink-0"></div>
+              <div>
+                <h1 class="font-bold">Omar Jangavadze</h1>
+                <div class="flex gap-20 items-center justify-between">
+                  <p>omar.jangavadze11@gmail.com</p>
+
+                  <button
+                    @click.stop="logout"
+                    class="group duration-300 hover:bg-black/10 rounded-full w-8 h-8 flex items-center justify-center ease-linear"
+                  >
+                    <LogoutIcon class="group-hover:scale-75 duration-300 ease-linear" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Transition>
         </div>
         <div v-else class="hidden sm:flex items-center gap-10">
           <BaseButton link to="/auth/signup" mode="signup">Sign up</BaseButton>
@@ -66,18 +98,28 @@ import QuizIcon from '@/icons/QuizIcon.vue'
 import BurgerMenuIcon from '@/icons/BurgerMenuIcon.vue'
 import SearchIcon from '@/icons/SearchIcon.vue'
 import CancelIcon from '@/icons/CancelIcon.vue'
+import LogoutIcon from '@/icons/LogoutIcon.vue'
 import Avatar from '@/icons/Avatar.vue'
 import MenuFunctionality from './MenuFunctionality.vue'
+import { logout as logoutApi } from '@/services/api/auth'
 
 export default {
   props: ['isHomePage'],
-  components: { QuizIcon, BurgerMenuIcon, SearchIcon, CancelIcon, Avatar, MenuFunctionality },
+  components: {
+    QuizIcon,
+    BurgerMenuIcon,
+    SearchIcon,
+    CancelIcon,
+    LogoutIcon,
+    Avatar,
+    MenuFunctionality
+  },
   data() {
     return {
       inputFocused: false,
-      search: '',
       menuModalOpen: false,
-      userLoggedIn: false // for now, before authorization is added
+      credentialsOpen: false,
+      search: ''
     }
   },
 
@@ -87,9 +129,20 @@ export default {
     },
     activeQuizPage() {
       return this.$route.name === 'quizzes'
+    },
+    userLoggedIn() {
+      return this.$store.getters['auth/isAuthenticated']
     }
   },
   methods: {
+    async logout() {
+      await logoutApi()
+      this.$store.dispatch('auth/logout')
+      this.$router.push('/')
+    },
+    openCredentials() {
+      if (!this.credentialsOpen) this.credentialsOpen = true
+    },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     },
