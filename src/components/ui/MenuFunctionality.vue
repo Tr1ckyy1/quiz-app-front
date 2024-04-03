@@ -12,18 +12,21 @@
         <CancelIcon @click="closeModal" />
       </div>
       <h1 class="py-5 border-y text-xl font-bold my-8">Quizzes</h1>
-      <RouterLink
-        to="/auth/signup"
-        class="block rounded-[4px] py-3 bg-black w-full text-white font-bold mb-6 text-center"
-      >
-        Sign up
-      </RouterLink>
-      <RouterLink
-        to="/auth/login"
-        class="block rounded-[4px] py-3 text-blue-main w-full bg-[#F6F6F7] font-bold text-center"
-      >
-        Log in
-      </RouterLink>
+      <div v-if="!userLoggedIn">
+        <RouterLink
+          to="/auth/signup"
+          class="block rounded-[4px] py-3 bg-black w-full text-white font-bold mb-6 text-center"
+        >
+          Sign up
+        </RouterLink>
+        <RouterLink
+          to="/auth/login"
+          class="block rounded-[4px] py-3 text-blue-main w-full bg-[#F6F6F7] font-bold text-center"
+        >
+          Log in
+        </RouterLink>
+      </div>
+      <button v-else @click="logout">Logout</button>
     </div>
   </Transition>
 </template>
@@ -34,13 +37,16 @@ import CancelIcon from '@/icons/CancelIcon.vue'
 import QuizIcon from '@/icons/QuizIcon.vue'
 
 export default {
-  emits: ['close'],
-  props: ['menuModalOpen'],
+  emits: ['close', 'logUserOut'],
+  props: ['menuModalOpen', 'userLoggedIn'],
   components: { Modal, CancelIcon, QuizIcon },
 
   methods: {
     closeModal() {
       this.$emit('close')
+    },
+    logout() {
+      this.$emit('logUserOut')
     }
   }
 }

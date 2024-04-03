@@ -8,6 +8,8 @@ import Forgot from '@/components/auth/Forgot.vue'
 import TheHeader from '@/components/ui/TheHeader.vue'
 import TheFooter from '@/components/ui/TheFooter.vue'
 
+import store from '@/store/index'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -46,16 +48,9 @@ const router = createRouter({
           path: 'forgot',
           component: Forgot
         }
-      ]
+      ],
+      meta: { requiresUnAuth: true }
     }
-    //   {
-    //     path: '/about',
-    //     name: 'about',
-    //     // route level code-splitting
-    //     // this generates a separate chunk (About.[hash].js) for this route
-    //     // which is lazy-loaded when the route is visited.
-    //     component: () => import('../views/AboutView.vue')
-    //   }
   ],
   scrollBehavior(_, _1, savedPosition) {
     if (savedPosition) {
@@ -63,6 +58,13 @@ const router = createRouter({
     }
     return { left: 0, top: 0 }
   }
+})
+router.beforeEach(function (to, _, next) {
+  const authenticated = store.getters['auth/isAuthenticated']
+  if (to.meta.requiresAuth && !authenticated) {
+    next('/auth/  login')
+  } else if (to.meta.requiresUnAuth && authenticated) next('/quizzes')
+  else next()
 })
 
 export default router

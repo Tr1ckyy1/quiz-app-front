@@ -15,12 +15,12 @@
     <ErrorIcon class="absolute right-4 top-1/2 -translate-y-1/2" v-if="error" />
     <ShowIcon
       @click="passwordIsVisible = true"
-      class="absolute right-4 top-1/2 -translate-y-1/2"
+      class="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer"
       v-if="type === 'password' && !error"
     />
     <HideIcon
       @click="passwordIsVisible = false"
-      class="absolute right-4 top-1/2 -translate-y-1/2"
+      class="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer"
       v-if="passwordIsVisible && !error"
     />
   </div>

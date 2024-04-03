@@ -1,16 +1,14 @@
 <template>
   <section class="flex gap-20 justify-center sm:justify-start">
-    <ToastMessage
-      :isShowing="toast.isShowing"
-      :type="toast.type"
-      :action="toast.action"
-      :text="toast.text"
-    />
-    <img src="@/assets/create-logo.png" class="hidden sm:block" />
+    <ToastMessage :toast="toast" />
+    <RouterLink class="absolute top-6 left-6 hidden sm:block" to="/">
+      <QuizIcon />
+    </RouterLink>
+    <img src="@/assets/create-logo.png" class="hidden sm:block object-cover min-h-screen" />
     <div class="w-full max-w-[34rem] py-14">
-      <button class="flex items-center px-6" @click="$router.go(-1)">
+      <button class="flex items-center px-6 hover:underline duration-100" @click="$router.go(-1)">
         <GoBack />
-        <h1>Back</h1>
+        <p>Back</p>
       </button>
       <AuthModal title="Create account" description="Already have an account?" descr-span="Log in">
         <Form @submit="onSubmit" class="space-y-4" :validation-schema="schema" v-slot="{ errors }">
@@ -78,7 +76,7 @@
             <ErrorMessage name="accept_terms" class="block text-red-main mt-2" />
           </div>
 
-          <BaseButton mode="authButton">Sign up</BaseButton>
+          <BaseButton mode="authButton" :disabled="isLoading">Sign up</BaseButton>
         </Form>
       </AuthModal>
     </div>
@@ -88,6 +86,7 @@
 <script>
 import AuthModal from '@/components/ui/AuthModal.vue'
 import BaseInput from '@/components/ui/BaseInput.vue'
+import QuizIcon from '@/icons/QuizIcon.vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import * as yup from 'yup'
 import GoBack from '@/icons/GoBack.vue'
@@ -97,6 +96,7 @@ export default {
   components: {
     AuthModal,
     BaseInput,
+    QuizIcon,
     Form,
     Field,
     ErrorMessage,
@@ -104,51 +104,63 @@ export default {
   },
   data() {
     const schema = yup.object().shape({
-      username: yup
-        .string()
-        .trim()
-        .required('Username is required')
-        .min(3, 'Must be at least 3 characters'),
-      email: yup.string().required('Email is required').email('Must be a valid email address'),
-      password: yup
-        .string()
-        .trim()
-        .required('Password is required')
-        .min(3, 'Must be at least 3 characters'),
-      password_confirmation: yup
-        .string()
-        .required('Confirm password is required')
-        .oneOf([yup.ref('password')], 'Passwords do not match'),
-      accept_terms: yup.boolean().required('The accept terms field must be accepted')
+      // username: yup
+      //   .string()
+      //   .trim()
+      //   .required('Username is required')
+      //   .min(3, 'Must be at least 3 characters'),
+      // email: yup.string().required('Email is required').email('Must be a valid email address'),
+      // password: yup
+      //   .string()
+      //   .trim()
+      //   .required('Password is required')
+      //   .min(3, 'Must be at least 3 characters'),
+      // password_confirmation: yup
+      //   .string()
+      //   .required('Confirm password is required')
+      //   .oneOf([yup.ref('password')], 'Passwords do not match'),
+      // accept_terms: yup.boolean().required('The accept terms field must be accepted')
     })
 
     return {
       schema,
-      toast: {
-        isShowing: false,
-        type: '',
-        text: '',
-        action: ''
-      }
+      isLoading: false
+    }
+  },
+  computed: {
+    toast() {
+      return this.$store.getters['toast/toastValues']
     }
   },
   methods: {
     async onSubmit(values, { resetForm, setFieldError }) {
+      this.isLoading = true
       try {
-        await signup(values)
+        const {
+          data: { type, text, message }
+        } = await signup(values)
         resetForm()
-        this.toast.isShowing = true
-        this.toast.type = 'success'
-        this.toast.text = `Created Successfully!`
-        this.toast.action = 'Please check your email address for verification'
-
-        setTimeout(() => {
-          this.toast.isShowing = false
-        }, 4000)
-      } catch ({ errorMessages }) {
-        for (const fieldName in errorMessages) {
-          setFieldError(fieldName, errorMessages[fieldName])
+        this.$store.dispatch('toast/setToast', {
+          type: type,
+          text: text,
+          message: message,
+          duration: 3000
+        })
+      } catch (error) {
+        if (!error.response?.data?.errors) {
+          this.$store.dispatch('toast/setToast', {
+            type: 'error',
+            text: `Unexpected Error`,
+            message: error.response?.data?.message ?? error.message,
+            duration: 5000
+          })
+        } else {
+          for (const fieldName in error.response.data.errors) {
+            setFieldError(fieldName, error.response.data.errors[fieldName])
+          }
         }
+      } finally {
+        this.isLoading = false
       }
     }
   }
