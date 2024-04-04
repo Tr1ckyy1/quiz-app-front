@@ -7,7 +7,7 @@
       :placeholder="placeholder"
       :name="name"
       class="border p-4 outline-none rounded-xl"
-      :class="{ 'border-red-main': error }"
+      :class="{ 'border-red-main': error, 'focus:border-blue-main': !error }"
       :validateOnInput="true"
       :validateOnBlur="false"
     />

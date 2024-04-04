@@ -16,9 +16,15 @@ export default {
         'footer-grey': '#475467',
         'toast-green': '#01E17B',
         'toast-yellow': '#FFD21F',
-        'toast-red': '#F04349'
+        'toast-red': '#F04349',
+        'filter-grey': '#D0D5DD'
+      },
+      keyframes: {
+        progress: {
+          '100%': { right: '100%' }
+        }
       }
     }
   },
-  plugins: []
+  plugins: [require('tailwind-scrollbar')]
 }

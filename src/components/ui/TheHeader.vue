@@ -1,10 +1,13 @@
 <template>
-  <header class="p-4 border-b sticky top-0 w-full bg-white z-50 sm:px-24 sm:py-6">
-    <MenuFunctionality
+  <header class="p-4 border-b top-0 w-full sticky bg-white z-50 sm:px-24 sm:py-6">
+    <ToastMessage :toast="toast" />
+
+    <BurgerMenuFunctionality
       @close="closeMenuModal"
       :menuModalOpen="menuModalOpen"
       :userLoggedIn="userLoggedIn"
       @logUserOut="logout"
+      :userCredentials="userCredentials"
     />
     <nav class="flex justify-between items-center h-8 sm:h-12">
       <div class="flex items-center gap-20">
@@ -30,7 +33,7 @@
           <input
             id="search"
             type="text"
-            class="peer outline-none px-8 focus:px-10 group focus:ring-1 focus:ring-[#D0D5DD] w-full rounded-lg focus:bg-[#F9FAFB] py-2"
+            class="peer outline-none px-8 focus:px-10 focus:ring-1 focus:ring-[#D0D5DD] w-full rounded-lg focus:bg-[#F9FAFB] py-2"
             placeholder="Search"
             @focus="focusInput"
             @blur="blurInput"
@@ -47,12 +50,12 @@
             <CancelIcon />
           </div>
         </div>
-        <div @click="openMenuModal" class="sm:hidden" v-if="!inputFocused">
+        <div @click="openMenuModal" class="cursor-pointer sm:hidden" v-if="!inputFocused">
           <BurgerMenuIcon />
         </div>
 
         <div
-          @click="openCredentials"
+          @click.stop="openCredentialsModal"
           v-if="userLoggedIn"
           class="hidden sm:flex w-8 h-8 rounded-full border items-center justify-center cursor-pointer shrink-0 relative"
         >
@@ -64,16 +67,18 @@
             leave-to-class="scale-75"
           >
             <div
-              v-if="credentialsOpen"
-              class="absolute border cursor-default border-[#D0D5DD] bg-white right-0 top-0 rounded-lg z-50 shadow-md p-8 space-y-5"
+              v-if="credentialsModalOpen"
+              class="absolute border cursor-default border-[#D0D5DD] bg-white right-0 top-0 rounded-lg z-[500] shadow-md p-8 space-y-5"
+              ref="credentialsModal"
             >
               <div class="w-10 h-10 bg-gray-500 rounded-full shrink-0"></div>
               <div>
-                <h1 class="font-bold">Omar Jangavadze</h1>
+                <h1 class="font-bold">{{ userCredentials?.username }}</h1>
                 <div class="flex gap-20 items-center justify-between">
-                  <p>omar.jangavadze11@gmail.com</p>
+                  <p>{{ userCredentials?.email }}</p>
 
                   <button
+                    v-if="userLoggedIn"
                     @click.stop="logout"
                     class="group duration-300 hover:bg-black/10 rounded-full w-8 h-8 flex items-center justify-center ease-linear"
                   >
@@ -100,8 +105,9 @@ import SearchIcon from '@/icons/SearchIcon.vue'
 import CancelIcon from '@/icons/CancelIcon.vue'
 import LogoutIcon from '@/icons/LogoutIcon.vue'
 import Avatar from '@/icons/Avatar.vue'
-import MenuFunctionality from './MenuFunctionality.vue'
+import BurgerMenuFunctionality from './BurgerMenuFunctionality.vue'
 import { logout as logoutApi } from '@/services/api/auth'
+import { getUser as getUserApi } from '@/services/api/user'
 
 export default {
   props: ['isHomePage'],
@@ -112,14 +118,15 @@ export default {
     CancelIcon,
     LogoutIcon,
     Avatar,
-    MenuFunctionality
+    BurgerMenuFunctionality
   },
   data() {
     return {
       inputFocused: false,
       menuModalOpen: false,
-      credentialsOpen: false,
-      search: ''
+      credentialsModalOpen: false,
+      search: '',
+      userCredentials: null
     }
   },
 
@@ -132,16 +139,55 @@ export default {
     },
     userLoggedIn() {
       return this.$store.getters['auth/isAuthenticated']
+    },
+    toast() {
+      return this.$store.getters['toast/toastValues']
     }
   },
   methods: {
-    async logout() {
-      await logoutApi()
-      this.$store.dispatch('auth/logout')
-      this.$router.push('/')
+    async getUser() {
+      try {
+        const {
+          data: { email, username }
+        } = await getUserApi()
+        this.userCredentials = {
+          email,
+          username
+        }
+      } catch (err) {
+        this.$store.dispatch('toast/setToast', {
+          type: 'error',
+          text: err.response?.status === 401 ? 'Unauthorized' : 'Unexpected Error',
+          message: err.message,
+          duration: 5000
+        })
+      }
     },
-    openCredentials() {
-      if (!this.credentialsOpen) this.credentialsOpen = true
+    async logout() {
+      this.credentialsModalOpen = false
+      if (localStorage.getItem('loggedIn')) localStorage.removeItem('loggedIn')
+
+      try {
+        await logoutApi()
+
+        this.$store.dispatch('auth/logout')
+        this.$router.replace('/auth/login')
+      } catch (err) {
+        this.$store.dispatch('toast/setToast', {
+          type: 'error',
+          text: err.response?.status === 401 ? 'Unauthorized' : 'Unexpected Error',
+          message: err.message,
+          duration: 5000
+        })
+      }
+    },
+    openCredentialsModal() {
+      if (!this.credentialsModalOpen) this.credentialsModalOpen = true
+    },
+    handleClickOutside(e) {
+      if (this.$refs.credentialsModal && !this.$refs.credentialsModal?.contains(e.target)) {
+        this.credentialsModalOpen = false
+      }
     },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -162,6 +208,15 @@ export default {
     closeMenuModal() {
       this.menuModalOpen = false
     }
+  },
+  mounted() {
+    document.addEventListener('click', this.handleClickOutside)
+
+    if (localStorage.getItem('loggedIn') && this.$store.getters['auth/isAuthenticated'])
+      this.getUser()
+  },
+  beforeUnmount() {
+    document.removeEventListener('click', this.handleClickOutside)
   }
 }
 </script>

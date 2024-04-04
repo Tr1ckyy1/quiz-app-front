@@ -6,7 +6,10 @@
     <img src="@/assets/forgot-logo.png" class="hidden sm:block object-cover min-h-screen" />
 
     <div class="w-full max-w-[34rem] py-14">
-      <button class="flex items-center px-6 hover:underline duration-100" @click="$router.go(-1)">
+      <button
+        class="flex items-center px-6 sm:hover:underline sm:duration-100"
+        @click="$router.go(-1)"
+      >
         <GoBack />
         <p>Back</p>
       </button>

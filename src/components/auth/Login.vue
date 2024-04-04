@@ -7,7 +7,10 @@
     <img src="@/assets/login-logo.png" class="hidden sm:block object-cover min-h-screen" />
 
     <div class="w-full max-w-[34rem] py-14">
-      <button class="flex items-center px-6 hover:underline duration-100" @click="$router.go(-1)">
+      <button
+        class="flex items-center px-6 sm:hover:underline sm:duration-100"
+        @click="$router.go(-1)"
+      >
         <GoBack />
         <p>Back</p>
       </button>
@@ -37,11 +40,11 @@
                 <Field
                   :value="true"
                   type="checkbox"
-                  name="remember"
-                  id="remember"
+                  name="remember_token"
+                  id="remember_token"
                   class="appearance-none w-5 h-5 rounded-full border checked:bg-black"
                 />
-                <label for="remember">
+                <label for="remember_token">
                   <svg
                     class="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
                     width="16"
@@ -54,7 +57,7 @@
                   </svg>
                 </label>
               </div>
-              <label for="remember" class="text-sm">Remember for 30 days</label>
+              <label for="remember_token" class="text-sm">Remember for 30 days</label>
             </div>
 
             <RouterLink to="/auth/forgot">Forgot password?</RouterLink>
@@ -136,10 +139,10 @@ export default {
             data: { type, text, message, duration }
           } = await resend({ id, hash, expires })
           this.$store.dispatch('toast/setToast', {
-            type: type,
-            text: text,
-            message: message,
-            duration: duration
+            type,
+            text,
+            message,
+            duration
           })
         } catch (err) {
           this.$store.dispatch('toast/setToast', {

@@ -7,7 +7,7 @@
 
     <img
       src="@/assets/main-picture-desktop.png"
-      class="hidden sm:block absolute z-10 top-10 right-0"
+      class="hidden sm:block absolute z-10 top-30 right-0"
     />
 
     <div class="-mt-32 w-full z-20 sm:mt-28 sm:z-0">
