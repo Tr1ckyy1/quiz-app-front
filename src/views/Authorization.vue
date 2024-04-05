@@ -2,4 +2,11 @@
   <RouterView />
 </template>
 
-<script></script>
+<script>
+import { getCsrfCookie } from '@/plugins/axios'
+export default {
+  mounted() {
+    getCsrfCookie()
+  }
+}
+</script>

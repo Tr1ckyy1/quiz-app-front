@@ -3,7 +3,14 @@
     <div class="text-center space-y-6 sm:text-left">
       <h1 class="font-extrabold text-2xl font-raleway sm:text-4xl">{{ title }}</h1>
 
-      <p class="block" :class="{ 'sm:hidden': !title.includes('Forgot') }">
+      <p :class="{ hidden: !title.includes('Reset') }">Please type something you'll remember</p>
+      <p
+        class="block"
+        :class="{
+          'sm:hidden': !title.includes('Forgot'),
+          hidden: title.includes('Reset')
+        }"
+      >
         {{ description }}
         <RouterLink :to="goTo" class="text-blue-main font-bold">
           {{ descrSpan }}

@@ -163,7 +163,7 @@ export default {
         }
         this.$store.dispatch('toast/setToast', {
           type: 'error',
-          text: err.response?.status === 401 ? 'Unauthorized' : 'Unexpected Error',
+          text: err?.response?.data?.message || 'Unexpected Error',
           message: err.message,
           duration: 5000
         })

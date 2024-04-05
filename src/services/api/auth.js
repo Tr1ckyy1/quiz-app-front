@@ -23,3 +23,11 @@ export async function verifyUser({ id, hash, expires, signature }) {
 export async function resend({ id, hash, expires }) {
   return await instance.post('/api/email/verification-notification', { id, hash, expires })
 }
+
+export async function forgotPassword({ email }) {
+  return await instance.post('api/forgot-password', { email })
+}
+
+export async function resetPassword(data) {
+  return await instance.post('/api/reset-password', data)
+}
