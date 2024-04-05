@@ -39,7 +39,7 @@
       </div>
       <div v-if="showButtons" class="sm:flex hidden gap-4 items-center">
         <button
-          class="bg-blue-main text-white py-2.5 px-6 font-semibold rounded-xl hover:brightness-90"
+          class="bg-blue-main text-white py-2 px-6 font-semibold rounded-xl hover:brightness-90"
         >
           Confirm
         </button>
