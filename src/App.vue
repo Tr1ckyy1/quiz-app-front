@@ -18,7 +18,9 @@ export default {
     getCsrfCookie()
   },
   beforeMount() {
-    if (localStorage.getItem('loggedIn')) this.$store.dispatch('auth/login')
+    if (localStorage.getItem('loggedIn')) {
+      this.$store.dispatch('auth/login')
+    }
   }
 }
 </script>

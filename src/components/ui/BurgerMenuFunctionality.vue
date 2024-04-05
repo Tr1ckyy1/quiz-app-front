@@ -7,15 +7,19 @@
     leave-to-class="-translate-x-full"
   >
     <div v-if="menuModalOpen" class="fixed z-[120] w-3/4 top-0 left-0 bg-white p-6">
-      <div class="flex justify-between items-center">
-        <QuizIcon />
+      <div class="flex justify-between items-center border-b pb-4">
+        <RouterLink @click="closeModal" to="/">
+          <QuizIcon />
+        </RouterLink>
         <CancelIcon @click="closeModal" />
       </div>
-      <h1 class="py-5 border-y text-xl font-bold my-8">Quizzes</h1>
-      <div v-if="!userLoggedIn">
+      <RouterLink @click="closeModal" to="/quizzes" class="py-4 border-b block text-xl font-bold"
+        >Quizzes</RouterLink
+      >
+      <div v-if="!userLoggedIn" class="mt-4 space-y-4">
         <RouterLink
           to="/auth/signup"
-          class="block rounded-[4px] py-3 bg-black w-full text-white font-bold mb-6 text-center"
+          class="block rounded-[4px] py-3 bg-black w-full text-white font-bold text-center"
         >
           Sign up
         </RouterLink>
@@ -26,7 +30,23 @@
           Log in
         </RouterLink>
       </div>
-      <button v-else @click="logout">Logout</button>
+      <div v-else>
+        <div class="flex items-center gap-6 border-b py-4">
+          <div class="w-14 h-14 bg-gray-500 rounded-full shrink-0"></div>
+          <div>
+            <h1 class="font-bold">{{ userCredentials?.username }}</h1>
+            <p>{{ userCredentials?.email }}</p>
+          </div>
+        </div>
+
+        <button
+          v-if="userLoggedIn"
+          @click.stop="logout"
+          class="block rounded-[4px] py-3 text-blue-main w-full bg-[#F6F6F7] font-bold text-center mt-4"
+        >
+          Log out
+        </button>
+      </div>
     </div>
   </Transition>
 </template>
@@ -38,7 +58,7 @@ import QuizIcon from '@/icons/QuizIcon.vue'
 
 export default {
   emits: ['close', 'logUserOut'],
-  props: ['menuModalOpen', 'userLoggedIn'],
+  props: ['menuModalOpen', 'userLoggedIn', 'userCredentials'],
   components: { Modal, CancelIcon, QuizIcon },
 
   methods: {
@@ -47,6 +67,7 @@ export default {
     },
     logout() {
       this.$emit('logUserOut')
+      this.closeModal()
     }
   }
 }
