@@ -155,6 +155,12 @@ export default {
           username
         }
       } catch (err) {
+        if (err?.response?.status === 401) {
+          if (this.userLoggedIn) {
+            this.$store.dispatch('auth/logout')
+          }
+          if (localStorage.getItem('loggedIn')) localStorage.removeItem('loggedIn')
+        }
         this.$store.dispatch('toast/setToast', {
           type: 'error',
           text: err.response?.status === 401 ? 'Unauthorized' : 'Unexpected Error',
@@ -165,7 +171,6 @@ export default {
     },
     async logout() {
       this.credentialsModalOpen = false
-      if (localStorage.getItem('loggedIn')) localStorage.removeItem('loggedIn')
 
       try {
         await logoutApi()
