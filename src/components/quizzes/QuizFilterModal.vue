@@ -83,7 +83,7 @@
       <div class="p-6 sm:p-4 sm:border sm:rounded-xl sm:border-filter-grey sm:basis-2/3">
         <div class="space-y-4" v-show="activeElement === 'filter'">
           <div v-if="isAuthenticated" class="space-y-6">
-            <h2 class="text-blue-main font-semibold">Filter by</h2>
+            <h2 class="hidden sm:block text-blue-main font-semibold">Filter by</h2>
             <FilterCheckbox name="my_quizzes" title="My quizzes" />
             <FilterCheckbox name="not_completed" title="Not completed" />
           </div>
