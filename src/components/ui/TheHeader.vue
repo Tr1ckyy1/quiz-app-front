@@ -1,5 +1,5 @@
 <template>
-  <header class="p-4 border-b top-0 w-full sticky bg-white z-50 sm:px-24 sm:py-6">
+  <header class="p-4 border-b top-0 w-full sticky bg-white z-[300] sm:px-24 sm:py-6">
     <ToastMessage :toast="toast" />
 
     <BurgerMenuFunctionality
@@ -68,7 +68,7 @@
           >
             <div
               v-if="credentialsModalOpen"
-              class="absolute border cursor-default border-[#D0D5DD] bg-white right-0 top-0 rounded-lg z-[500] shadow-md p-8 space-y-5"
+              class="absolute border cursor-default border-[#D0D5DD] bg-white right-0 top-0 rounded-lg shadow-md p-8 space-y-5"
               ref="credentialsModal"
             >
               <div class="w-10 h-10 bg-gray-500 rounded-full shrink-0"></div>
