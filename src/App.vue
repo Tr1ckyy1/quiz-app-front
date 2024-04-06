@@ -1,5 +1,5 @@
 <template>
-  <RouterView :isHomePage="isHomePage" name="header" />
+  <RouterView name="header" />
   <main>
     <RouterView />
   </main>
@@ -8,12 +8,6 @@
 
 <script>
 export default {
-  computed: {
-    isHomePage() {
-      return this.$route.name === 'home'
-    }
-  },
-
   beforeMount() {
     if (localStorage.getItem('loggedIn')) {
       this.$store.dispatch('auth/login')

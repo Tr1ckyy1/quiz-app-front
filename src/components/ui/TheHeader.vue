@@ -29,7 +29,7 @@
       </div>
 
       <div class="flex items-center gap-8" :class="{ 'w-full  sm:w-fit': inputFocused }">
-        <div v-if="!isHomePage" class="flex items-center relative" :class="focusedInputWidth">
+        <div v-if="activeQuizPage" class="flex items-center relative" :class="focusedInputWidth">
           <input
             id="search"
             type="text"
@@ -110,7 +110,6 @@ import { logout as logoutApi } from '@/services/api/auth'
 import { getUser as getUserApi } from '@/services/api/user'
 
 export default {
-  props: ['isHomePage'],
   components: {
     QuizIcon,
     BurgerMenuIcon,
