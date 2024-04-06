@@ -2,7 +2,7 @@
   <Form
     @submit="onSubmit"
     ref="formRef"
-    class="fixed inset-0 bg-gray-100 sm:bg-white z-[350] overflow-y-scroll sm:absolute sm:inset-auto sm:w-[70rem] sm:top-full sm:overflow-hidden sm:mt-2 sm:-right-0 sm:border sm:border-black sm:rounded-xl sm:py-8 sm:px-4 sm:-shadow-sm"
+    class="fixed inset-0 bg-gray-100 sm:bg-white z-[350] sm:z-[250] overflow-y-scroll sm:absolute sm:inset-auto sm:w-[70rem] sm:top-full sm:overflow-hidden sm:mt-2 sm:-right-0 sm:border sm:border-black sm:rounded-xl sm:p-4 sm:-shadow-sm"
   >
     <nav class="p-6 block sm:hidden">
       <ul class="flex justify-between items-center">
@@ -13,7 +13,9 @@
         <li @click="$emit('close')"><CancelIcon /></li>
       </ul>
     </nav>
-    <div class="sm:flex sm:gap-4 sm:justify-between sm:items-center sm:px-4">
+    <div
+      class="sm:flex sm:gap-4 sm:justify-between sm:items-center bg-[#F6F6F6B2] rounded-xl sm:p-4"
+    >
       <div class="hidden sm:block">
         <div
           @click="toggleFilter"
