@@ -11,7 +11,6 @@ export default {
   data() {
     return {
       names: [
-        { id: 1, name: 'All Quizzes' },
         { id: 2, name: 'Geography' },
         { id: 3, name: 'Music' },
         { id: 4, name: 'Movies' },

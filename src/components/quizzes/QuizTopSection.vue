@@ -12,6 +12,13 @@
         class="border-b flex gap-6 sm:overflow-x-hidden scroll-smooth overflow-x-scroll scrollbar-none"
         ref="scrollContainer"
       >
+        <li
+          :class="isQueryUrlEmpty"
+          class="whitespace-nowrap py-4 cursor-pointer"
+          @click="removeAllQueriesFromUrl"
+        >
+          All Quizzes
+        </li>
         <QuizCategoryItem v-for="item in names" :key="item.id" :id="item.id" :name="item.name" />
       </ul>
       <button
@@ -65,6 +72,10 @@ export default {
     }
   },
   methods: {
+    removeAllQueriesFromUrl() {
+      this.$router.replace({ query: {} })
+      this.$store.dispatch('quizzes/removeAllCategories')
+    },
     toggleFilter() {
       this.filterModalShowing = !this.filterModalShowing
     },
@@ -95,6 +106,12 @@ export default {
       if (!this.showRightArrow) {
         this.showRightArrow = false
       }
+    }
+  },
+  computed: {
+    isQueryUrlEmpty() {
+      const hasNoQueries = Object.keys(this.$route.query).length === 0
+      return hasNoQueries && 'border-b-black border-b font-bold'
     }
   }
 }
