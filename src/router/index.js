@@ -67,7 +67,7 @@ const router = createRouter({
 router.beforeEach(function (to, _, next) {
   const authenticated = store.getters['auth/isAuthenticated']
   if (to.meta.requiresAuth && !authenticated) {
-    next('/auth/  login')
+    next('/auth/login')
   } else if (to.meta.requiresUnAuth && authenticated) next('/quizzes')
   else next()
 })
