@@ -12,7 +12,19 @@
         class="border-b flex gap-6 sm:overflow-x-hidden scroll-smooth overflow-x-scroll scrollbar-none"
         ref="scrollContainer"
       >
-        <QuizCategoryItem v-for="item in names" :key="item.id" :id="item.id" :name="item.name" />
+        <li
+          :class="isQueryUrlEmpty"
+          class="whitespace-nowrap py-4 cursor-pointer"
+          @click="removeAllQueriesFromUrl"
+        >
+          All Quizzes
+        </li>
+        <QuizCategoryItem
+          v-for="category in categories"
+          :key="category.id"
+          :id="category.id"
+          :name="category.name"
+        />
       </ul>
       <button
         class="hidden sm:duration-300 sm:hover:bg-black/10 sm:rounded-full sm:w-8 sm:h-8 sm:flex sm:items-center sm:justify-center sm:ease-linear sm:shrink-0"
@@ -21,10 +33,10 @@
       >
         <ScrollRight />
       </button>
-      <div class="relative">
+      <div class="relative ml-auto">
         <div
-          @click="toggleFilter"
-          class="w-fit my-4 sm:my-0 flex items-center gap-4 border border-[#66708599] p-2.5 rounded-xl outline-none shrink-0 group sm:hover:border-blue-main sm:duration-300 sm:hover:bg-blue-main/10 sm:cursor-pointer"
+          @click.stop="toggleFilter"
+          class="ml-auto w-fit my-4 sm:my-0 flex items-center gap-4 border border-[#66708599] p-2.5 rounded-xl outline-none shrink-0 group sm:hover:border-blue-main sm:duration-300 sm:hover:bg-blue-main/10 sm:cursor-pointer"
         >
           <FilterIcon class="sm:group-hover:fill-blue-main sm:duration-300" />
           <p class="sm:group-hover:text-blue-main sm:duration-300">Filter</p>
@@ -36,7 +48,7 @@
           leave-to-class="sm:opacity-0 sm:translate-x-0 -translate-x-full"
         >
           <QuizFilterModal
-            :names="names"
+            :categories="categories"
             @close="closeFilter"
             :isShowing="filterModalShowing"
             v-if="filterModalShowing"
@@ -55,7 +67,6 @@ import ScrollRight from '@/icons/ScrollRight.vue'
 import FilterIcon from '@/icons/FilterIcon.vue'
 
 export default {
-  props: ['names'],
   components: { QuizCategoryItem, QuizFilterModal, ScrollLeft, ScrollRight, FilterIcon },
   data() {
     return {
@@ -65,6 +76,12 @@ export default {
     }
   },
   methods: {
+    removeAllQueriesFromUrl() {
+      this.$router.replace({ query: {} })
+      this.$store.dispatch('filter/setAllCategories', [])
+      this.$store.dispatch('filter/setAllLevels', [])
+      this.$store.dispatch('filter/setSort', '')
+    },
     toggleFilter() {
       this.filterModalShowing = !this.filterModalShowing
     },
@@ -95,6 +112,17 @@ export default {
       if (!this.showRightArrow) {
         this.showRightArrow = false
       }
+    }
+  },
+  computed: {
+    isQueryUrlEmpty() {
+      const { categories, levels, sort, search } = this.$route.query
+
+      if (!categories && !levels && !sort && !search) return 'border-b-black border-b font-bold'
+      return ''
+    },
+    categories() {
+      return this.$store.getters['categories/getAllCategories']
     }
   }
 }

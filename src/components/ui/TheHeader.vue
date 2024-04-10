@@ -22,14 +22,18 @@
           </RouterLink>
         </div>
 
-        <RouterLink class="hidden sm:flex sm:items-center sm:gap-2" to="/quizzes">
+        <RouterLink
+          @click="removeAllQueriesFromUrl"
+          class="hidden sm:flex sm:items-center sm:gap-2"
+          to="/quizzes"
+        >
           <div v-if="activeQuizPage" class="w-3 h-3 bg-blue-main rounded-full"></div>
           <h1>Quizzes</h1>
         </RouterLink>
       </div>
 
       <div class="flex items-center gap-8" :class="{ 'w-full  sm:w-fit': inputFocused }">
-        <div v-if="!isHomePage" class="flex items-center relative" :class="focusedInputWidth">
+        <div v-if="activeQuizPage" class="flex items-center relative" :class="focusedInputWidth">
           <input
             id="search"
             type="text"
@@ -110,7 +114,6 @@ import { logout as logoutApi } from '@/services/api/auth'
 import { getUser as getUserApi } from '@/services/api/user'
 
 export default {
-  props: ['isHomePage'],
   components: {
     QuizIcon,
     BurgerMenuIcon,
@@ -126,10 +129,25 @@ export default {
       menuModalOpen: false,
       credentialsModalOpen: false,
       search: '',
-      userCredentials: null
+      userCredentials: null,
+      debounceTimer: null
     }
   },
-
+  watch: {
+    search(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        clearTimeout(this.debounceTimer)
+        this.debounceTimer = setTimeout(() => {
+          this.$router.replace({
+            query: {
+              ...this.$route.query,
+              search: this.search
+            }
+          })
+        }, 1000)
+      }
+    }
+  },
   computed: {
     focusedInputWidth() {
       return this.inputFocused ? 'w-full duration-150 transition-all sm:w-96' : 'w-32'
@@ -145,6 +163,13 @@ export default {
     }
   },
   methods: {
+    removeAllQueriesFromUrl() {
+      if (this.activeQuizPage) {
+        this.$store.dispatch('filter/setAllCategories', [])
+        this.$store.dispatch('filter/setAllLevels', [])
+        this.$store.dispatch('filter/setSort', '')
+      }
+    },
     async getUser() {
       try {
         const {
@@ -163,7 +188,7 @@ export default {
         }
         this.$store.dispatch('toast/setToast', {
           type: 'error',
-          text: err.response?.status === 401 ? 'Unauthorized' : 'Unexpected Error',
+          text: err?.response?.data?.message || 'Unexpected Error',
           message: err.message,
           duration: 5000
         })

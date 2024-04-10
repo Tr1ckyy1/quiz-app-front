@@ -1,5 +1,5 @@
 <template>
-  <RouterView :isHomePage="isHomePage" name="header" />
+  <RouterView name="header" />
   <main>
     <RouterView />
   </main>
@@ -7,16 +7,7 @@
 </template>
 
 <script>
-import { getCsrfCookie } from '@/plugins/axios'
 export default {
-  computed: {
-    isHomePage() {
-      return this.$route.name === 'home'
-    }
-  },
-  mounted() {
-    getCsrfCookie()
-  },
   beforeMount() {
     if (localStorage.getItem('loggedIn')) {
       this.$store.dispatch('auth/login')

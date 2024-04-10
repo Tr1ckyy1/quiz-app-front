@@ -144,9 +144,9 @@ export default {
         } = await signup(values)
         resetForm()
         this.$store.dispatch('toast/setToast', {
-          type: type,
-          text: text,
-          message: message,
+          type,
+          text,
+          message,
           duration: 3000
         })
       } catch (error) {

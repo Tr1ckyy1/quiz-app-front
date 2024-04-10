@@ -5,6 +5,7 @@ import Authorization from '@/views/Authorization.vue'
 import Signup from '@/components/auth/Signup.vue'
 import Login from '@/components/auth/Login.vue'
 import Forgot from '@/components/auth/Forgot.vue'
+import Reset from '@/components/auth/Reset.vue'
 import TheHeader from '@/components/ui/TheHeader.vue'
 import TheFooter from '@/components/ui/TheFooter.vue'
 
@@ -47,6 +48,10 @@ const router = createRouter({
         {
           path: 'forgot',
           component: Forgot
+        },
+        {
+          path: 'reset',
+          component: Reset
         }
       ],
       meta: { requiresUnAuth: true }
@@ -62,7 +67,7 @@ const router = createRouter({
 router.beforeEach(function (to, _, next) {
   const authenticated = store.getters['auth/isAuthenticated']
   if (to.meta.requiresAuth && !authenticated) {
-    next('/auth/  login')
+    next('/auth/login')
   } else if (to.meta.requiresUnAuth && authenticated) next('/quizzes')
   else next()
 })

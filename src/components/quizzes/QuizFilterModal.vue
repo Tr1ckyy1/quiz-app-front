@@ -2,7 +2,7 @@
   <Form
     @submit="onSubmit"
     ref="formRef"
-    class="fixed inset-0 bg-gray-100 sm:bg-white z-[299] overflow-y-scroll sm:absolute sm:inset-auto sm:w-[70rem] sm:top-full sm:overflow-hidden sm:mt-2 sm:-right-0 sm:border sm:border-black sm:rounded-xl sm:py-8 sm:px-4 sm:-shadow-sm"
+    class="fixed inset-0 bg-gray-100 sm:bg-white z-[350] sm:z-[250] overflow-y-scroll sm:absolute sm:inset-auto sm:w-[70rem] sm:top-full sm:overflow-hidden sm:mt-2 sm:-right-0 sm:border sm:border-black sm:rounded-xl sm:p-4 sm:-shadow-sm"
   >
     <nav class="p-6 block sm:hidden">
       <ul class="flex justify-between items-center">
@@ -13,7 +13,9 @@
         <li @click="$emit('close')"><CancelIcon /></li>
       </ul>
     </nav>
-    <div class="sm:flex sm:gap-4 sm:justify-between sm:items-center sm:px-4">
+    <div
+      class="sm:flex sm:gap-4 sm:justify-between sm:items-center bg-[#F6F6F6B2] rounded-xl sm:p-4"
+    >
       <div class="hidden sm:block">
         <div
           @click="toggleFilter"
@@ -39,13 +41,13 @@
       </div>
       <div v-if="showButtons" class="sm:flex hidden gap-4 items-center">
         <button
-          class="bg-blue-main text-white py-2.5 px-6 font-semibold rounded-xl hover:brightness-90"
+          class="bg-blue-main text-white py-2 px-6 font-semibold rounded-xl hover:brightness-90"
         >
           Confirm
         </button>
         <span>|</span>
         <button
-          @click="customReset"
+          @click.stop="customReset"
           type="button"
           class="text-[#667085] hover:underline duration-100"
         >
@@ -91,18 +93,23 @@
           <div class="border-y py-4 space-y-6">
             <h2 class="font-semibold">Levels</h2>
             <ul class="flex flex-wrap gap-4">
-              <QuizLevelItem v-for="level in filteredLevels" :key="level" :title="level" />
+              <QuizLevelItem
+                v-for="level in filteredLevels"
+                :key="level.id"
+                :name="level.name"
+                :color="level.color"
+                :bgColor="level.bg_color_normal"
+              />
             </ul>
           </div>
 
           <div class="space-y-4">
             <h2 class="font-semibold">Categories</h2>
-            <ul class="flex flex-wrap gap-4">
+            <ul class="flex flex-wrap gap-4 sm:max-h-60 sm:overflow-y-auto sm:scrollbar-thin">
               <QuizCategoryItem
-                v-for="item in filteredCategories"
-                :key="item.id"
-                :id="item.id"
-                :name="item.name"
+                v-for="category in filteredCategories"
+                :key="category.id"
+                :name="category.name"
                 mode="filter"
               />
             </ul>
@@ -110,28 +117,14 @@
         </div>
 
         <ul v-show="activeElement !== 'filter'" class="space-y-6 sm:hidden">
-          <li class="flex items-center gap-4 pl-2">
-            <CancelIcon /><span class="font-semibold text-[#475467]">A-Z</span>
-          </li>
-          <li class="flex items-center gap-4 pl-2">
-            <CancelIcon /><span class="font-semibold text-[#475467]">Z-A</span>
-          </li>
-          <li class="flex items-center gap-4 pl-2">
-            <CancelIcon /><span class="font-semibold text-[#475467]">Most popular</span>
-          </li>
-          <li class="flex items-center gap-4 pl-2">
-            <CancelIcon /><span class="font-semibold text-[#475467]">Newest</span>
-          </li>
-          <li class="flex items-center gap-4 pl-2">
-            <CancelIcon /><span class="font-semibold text-[#475467]">Oldest</span>
-          </li>
+          <FilterSorting />
         </ul>
         <div v-if="showButtons" class="sm:hidden flex gap-2 mt-6">
           <button class="bg-blue-main text-white py-2.5 px-6 font-semibold basis-2/3 rounded-xl">
             Confirm
           </button>
           <button
-            @click="customReset"
+            @click.stop="customReset"
             type="button"
             class="border border-filter-grey py-2.5 px-5 rounded-lg basis-1/3"
           >
@@ -142,22 +135,7 @@
       <ul
         class="hidden sm:block sm:p-4 sm:border sm:rounded-xl sm:border-filter-grey basis-1/3 h-full space-y-6"
       >
-        <h2 class="text-blue-main font-semibold">Sort by</h2>
-        <li class="flex items-center gap-4 pl-2">
-          <CancelIcon /><span class="font-semibold text-[#475467]">A-Z</span>
-        </li>
-        <li class="flex items-center gap-4 pl-2">
-          <CancelIcon /><span class="font-semibold text-[#475467]">Z-A</span>
-        </li>
-        <li class="flex items-center gap-4 pl-2">
-          <CancelIcon /><span class="font-semibold text-[#475467]">Most popular</span>
-        </li>
-        <li class="flex items-center gap-4 pl-2">
-          <CancelIcon /><span class="font-semibold text-[#475467]">Newest</span>
-        </li>
-        <li class="flex items-center gap-4 pl-2">
-          <CancelIcon /><span class="font-semibold text-[#475467]">Oldest</span>
-        </li>
+        <FilterSorting />
       </ul>
     </div>
   </Form>
@@ -168,9 +146,11 @@ import SearchIcon from '@/icons/SearchIcon.vue'
 import CancelIcon from '@/icons/CancelIcon.vue'
 import FilterIcon from '@/icons/FilterIcon.vue'
 import FilterCheckbox from './FilterCheckbox.vue'
+import FilterSorting from './FilterSorting.vue'
 import QuizLevelItem from './QuizLevelItem.vue'
 import QuizCategoryItem from './QuizCategoryItem.vue'
 import { Form, Field } from 'vee-validate'
+import { getDifficultyLevels } from '@/services/api/levels'
 
 export default {
   emits: ['close'],
@@ -182,6 +162,7 @@ export default {
     CancelIcon,
     FilterIcon,
     FilterCheckbox,
+    FilterSorting,
     QuizLevelItem,
     QuizCategoryItem
   },
@@ -190,37 +171,68 @@ export default {
     return {
       search: '',
       activeElement: 'filter',
-      quizzesChecked: false,
-      notCompletedChecked: false,
       categoriesSelected: false,
-      levels: ['Starter', 'Beginner', 'Middle', 'High', 'Very high', 'Dangerously high']
+      levels: []
     }
   },
   methods: {
     onSubmit(values) {
-      console.log(values)
+      const categories = this.$store.getters['filter/getCategoriesInFilter']
+      const levels = this.$store.getters['filter/getLevelsInFilter']
+
+      // Filter out duplicate values before building the query string
+      const uniqueFiltersCategories = [...new Set([...categories])]
+      const uniqueFiltersLevels = [...new Set([...levels])]
+
+      this.$router.push({
+        query: {
+          ...this.$route.query,
+          categories: uniqueFiltersCategories.join('&'),
+          levels: uniqueFiltersLevels.join('&'),
+          sort: this.getSortBy
+        }
+      })
+      this.$emit('close')
     },
     customReset() {
       const formRef = this.$refs.formRef
       formRef.resetForm()
       this.search = ''
       this.activeElement = 'filter'
-      this.$store.dispatch('quizzes/removeAllCategories')
-      this.$store.dispatch('quizzes/removeAllLevels')
-      this.names.filter((item) => {
-        if (this.$route.query[`id${item.id}`] === item.name)
-          this.$store.dispatch('quizzes/addOnce', item.name)
-      })
+      this.$store.dispatch('filter/setAllCategories', [])
+      this.$store.dispatch('filter/setAllLevels', [])
+      this.addFromUrlAfterReset()
+    },
+    addFromUrlAfterReset() {
+      const { categories, levels } = this.$route.query
+      if (categories) {
+        this.$store.dispatch('filter/setAllCategories', categories.split('&'))
+      }
+      if (levels) {
+        this.$store.dispatch('filter/setAllLevels', levels.split('&'))
+      }
+      this.$store.dispatch('filter/setSort', this.$route.query.sort)
+    },
+    handleClickOutside(e) {
+      if (this.$refs.formRef?.$el && !this.$refs.formRef?.$el?.contains(e.target)) {
+        this.$emit('close')
+      }
     }
   },
+
   computed: {
+    categories() {
+      return this.$store.getters['categories/getAllCategories']
+    },
     filteredCategories() {
-      return this.names.filter((item) =>
+      return this.categories.filter((item) =>
         item.name.toLowerCase().includes(this.search.toLowerCase())
       )
     },
     filteredLevels() {
-      return this.levels.filter((level) => level.toLowerCase().includes(this.search.toLowerCase()))
+      return this.levels.filter((level) =>
+        level.name.toLowerCase().includes(this.search.toLowerCase())
+      )
     },
     isAuthenticated() {
       return this.$store.getters['auth/isAuthenticated']
@@ -235,15 +247,37 @@ export default {
         ? 'text-blue-main border-filter-grey bg-white'
         : 'text-[#66708580]  bg-transparent border-transparent'
     },
+    getSortBy() {
+      return this.$store.getters['filter/getSortBy']
+    },
     showButtons() {
       const formRef = this.$refs.formRef
       return (
-        this.$store.getters['quizzes/getCategoriesInFilter'].length > 0 ||
-        this.$store.getters['quizzes/getLevelsInFilter'].length > 0 ||
+        this.$store.getters['filter/getCategoriesInFilter'].length > 0 ||
+        this.$store.getters['filter/getLevelsInFilter'].length > 0 ||
         (formRef && formRef.values.my_quizzes) ||
-        (formRef && formRef.values.not_completed)
+        (formRef && formRef.values.not_completed) ||
+        this.getSortBy
       )
     }
+  },
+  async mounted() {
+    document.addEventListener('click', this.handleClickOutside)
+
+    try {
+      const { data } = await getDifficultyLevels()
+      this.levels = data
+    } catch (err) {
+      this.$store.dispatch('toast/setToast', {
+        type: 'error',
+        text: `Unexpected Error`,
+        message: err.message,
+        duration: 5000
+      })
+    }
+  },
+  unmounted() {
+    document.removeEventListener('click', this.handleClickOutside)
   }
 }
 </script>

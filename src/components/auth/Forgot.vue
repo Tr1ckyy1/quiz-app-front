@@ -1,5 +1,7 @@
 <template>
   <section class="flex gap-20 justify-center sm:justify-start">
+    <ToastMessage :toast="toast" />
+
     <RouterLink class="absolute top-6 left-6 hidden sm:block" to="/">
       <QuizIcon />
     </RouterLink>
@@ -27,7 +29,7 @@
             :error="errors.email"
           />
 
-          <BaseButton mode="authButton">Send</BaseButton>
+          <BaseButton :disabled="isLoading" mode="authButton">Send</BaseButton>
         </Form>
       </AuthModal>
     </div>
@@ -42,6 +44,8 @@ import { Form, Field } from 'vee-validate'
 import * as yup from 'yup'
 import GoBack from '@/icons/GoBack.vue'
 
+import { forgotPassword } from '@/services/api/auth'
+
 export default {
   components: {
     AuthModal,
@@ -55,12 +59,42 @@ export default {
     const schema = {
       email: yup.string().required('Email is required').email('Must be a valid email address')
     }
-    return { schema }
+    return { schema, isLoading: false }
   },
 
   methods: {
-    onSubmit(values) {
-      console.log(values)
+    async onSubmit(values, { resetForm, setFieldError }) {
+      this.isLoading = true
+      try {
+        const {
+          data: { type, text, message }
+        } = await forgotPassword(values)
+        resetForm()
+        this.$store.dispatch('toast/setToast', {
+          type,
+          text,
+          message,
+          duration: 3000
+        })
+      } catch (error) {
+        if (!error.response?.data?.errors?.email) {
+          this.$store.dispatch('toast/setToast', {
+            type: 'error',
+            text: `Unexpected Error`,
+            message: error.message,
+            duration: 5000
+          })
+        } else {
+          setFieldError('email', error?.response?.data?.errors?.email)
+        }
+      } finally {
+        this.isLoading = false
+      }
+    }
+  },
+  computed: {
+    toast() {
+      return this.$store.getters['toast/toastValues']
     }
   }
 }
