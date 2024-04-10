@@ -129,10 +129,25 @@ export default {
       menuModalOpen: false,
       credentialsModalOpen: false,
       search: '',
-      userCredentials: null
+      userCredentials: null,
+      debounceTimer: null
     }
   },
-
+  watch: {
+    search(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        clearTimeout(this.debounceTimer)
+        this.debounceTimer = setTimeout(() => {
+          this.$router.replace({
+            query: {
+              ...this.$route.query,
+              search: this.search
+            }
+          })
+        }, 1000)
+      }
+    }
+  },
   computed: {
     focusedInputWidth() {
       return this.inputFocused ? 'w-full duration-150 transition-all sm:w-96' : 'w-32'

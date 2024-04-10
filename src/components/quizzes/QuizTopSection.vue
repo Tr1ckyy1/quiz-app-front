@@ -116,9 +116,9 @@ export default {
   },
   computed: {
     isQueryUrlEmpty() {
-      const { categories, levels, sort } = this.$route.query
+      const { categories, levels, sort, search } = this.$route.query
 
-      if (!categories && !levels && !sort) return 'border-b-black border-b font-bold'
+      if (!categories && !levels && !sort && !search) return 'border-b-black border-b font-bold'
       return ''
     },
     categories() {

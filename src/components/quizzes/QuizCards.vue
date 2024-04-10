@@ -25,7 +25,7 @@
       <span class="text-blue-main font-semibold">Load more</span>
     </button>
     <p class="px-4 sm:px-24 mb-20 font-bold text-2xl" v-else>
-      No available quizzes for this category
+      No available quizzes for this request
     </p>
   </section>
 </template>

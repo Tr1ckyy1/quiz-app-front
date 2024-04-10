@@ -184,13 +184,14 @@ export default {
       const uniqueFiltersCategories = [...new Set([...categories])]
       const uniqueFiltersLevels = [...new Set([...levels])]
 
-      const queryString = {
-        categories: uniqueFiltersCategories.join('&'),
-        levels: uniqueFiltersLevels.join('&'),
-        sort: this.getSortBy
-      }
-
-      this.$router.push({ query: queryString })
+      this.$router.push({
+        query: {
+          ...this.$route.query,
+          categories: uniqueFiltersCategories.join('&'),
+          levels: uniqueFiltersLevels.join('&'),
+          sort: this.getSortBy
+        }
+      })
       this.$emit('close')
     },
     customReset() {
