@@ -55,15 +55,12 @@ export default {
   },
   methods: {
     async fetchQuizzes(query) {
-      // console.log(query)
       try {
         this.isLoading = true
 
         const {
           data: { data: quizzes }
         } = await getQuizzes(query)
-        // const data = await getQuizzes(query)
-        // console.log(data)
 
         this.quizzes = quizzes
       } catch (err) {

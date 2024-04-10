@@ -117,21 +117,7 @@
         </div>
 
         <ul v-show="activeElement !== 'filter'" class="space-y-6 sm:hidden">
-          <li class="flex items-center gap-4 pl-2">
-            <CancelIcon /><span class="font-semibold text-[#475467]">A-Z</span>
-          </li>
-          <li class="flex items-center gap-4 pl-2">
-            <CancelIcon /><span class="font-semibold text-[#475467]">Z-A</span>
-          </li>
-          <li class="flex items-center gap-4 pl-2">
-            <CancelIcon /><span class="font-semibold text-[#475467]">Most popular</span>
-          </li>
-          <li class="flex items-center gap-4 pl-2">
-            <CancelIcon /><span class="font-semibold text-[#475467]">Newest</span>
-          </li>
-          <li class="flex items-center gap-4 pl-2">
-            <CancelIcon /><span class="font-semibold text-[#475467]">Oldest</span>
-          </li>
+          <FilterSorting />
         </ul>
         <div v-if="showButtons" class="sm:hidden flex gap-2 mt-6">
           <button class="bg-blue-main text-white py-2.5 px-6 font-semibold basis-2/3 rounded-xl">
@@ -146,7 +132,11 @@
           </button>
         </div>
       </div>
-      <FilterSorting />
+      <ul
+        class="hidden sm:block sm:p-4 sm:border sm:rounded-xl sm:border-filter-grey basis-1/3 h-full space-y-6"
+      >
+        <FilterSorting />
+      </ul>
     </div>
   </Form>
 </template>

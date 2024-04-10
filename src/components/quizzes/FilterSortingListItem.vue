@@ -22,7 +22,7 @@ export default {
     activeSort() {
       return this.getSortBy === this.name
         ? 'underline font-extrabold'
-        : 'hover:underline font-semibold'
+        : 'sm:hover:underline font-semibold'
     }
   },
   mounted() {

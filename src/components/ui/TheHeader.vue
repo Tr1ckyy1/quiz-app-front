@@ -150,7 +150,6 @@ export default {
   methods: {
     removeAllQueriesFromUrl() {
       if (this.activeQuizPage) {
-        this.$router.replace({ query: {} })
         this.$store.dispatch('filter/setAllCategories', [])
         this.$store.dispatch('filter/setAllLevels', [])
         this.$store.dispatch('filter/setSort', '')
