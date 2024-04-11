@@ -1,9 +1,11 @@
 <template>
-  <RouterView name="header" />
-  <main>
-    <RouterView />
-  </main>
-  <RouterView name="footer" />
+  <div class="h-screen flex flex-col justify-between">
+    <RouterView name="header" />
+    <main class="flex-1">
+      <RouterView />
+    </main>
+    <RouterView name="footer" />
+  </div>
 </template>
 
 <script>

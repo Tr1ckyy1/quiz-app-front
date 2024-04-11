@@ -1,5 +1,5 @@
 <template>
-  <footer class="sm:z-20 sm:bg-white relative py-6 border-t">
+  <footer class="sm:z-20 sm:bg-white py-6 border-t">
     <section
       class="px-14 py-4 justify-between items-center space-y-8 sm:flex sm:justify-start sm:gap-40 sm:items-start sm:space-y-0 sm:px-24 sm:py-10"
     >
