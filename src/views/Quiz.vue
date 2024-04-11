@@ -59,7 +59,7 @@
         <LoadingSpinner />
       </div>
       <ul
-        v-else-if="!similarQuizzesLoading && similarQuizzes.length > 0"
+        v-else-if="!similarQuizzesLoading && similarQuizzes?.length > 0"
         class="basis-1/3 mt-4 hidden sm:block space-y-10"
       >
         <QuizCardItem
@@ -99,7 +99,6 @@ export default {
   watch: {
     quizId(id) {
       this.getQuiz(id)
-      this.getSimilarQuizzes(id)
     }
   },
   methods: {
@@ -110,18 +109,21 @@ export default {
           data: { data: quiz }
         } = await getQuizApi(id)
         this.quiz = quiz
+        const categoryIds = quiz.categories.map((category) => category.id)
+
+        this.getSimilarQuizzes(categoryIds, quiz.id)
       } catch (err) {
         console.log(err)
       } finally {
         this.isLoading = false
       }
     },
-    async getSimilarQuizzes(id) {
+    async getSimilarQuizzes(categoryIds, excludeId) {
       this.similarQuizzesLoading = true
       try {
         const {
           data: { data: quizzes }
-        } = await getSimilarQuizzesApi(id)
+        } = await getSimilarQuizzesApi(categoryIds, excludeId)
         this.similarQuizzes = quizzes
       } catch (err) {
         console.log(err)
@@ -132,7 +134,6 @@ export default {
   },
   mounted() {
     this.getQuiz(this.quizId)
-    this.getSimilarQuizzes(this.quizId)
   }
 }
 </script>

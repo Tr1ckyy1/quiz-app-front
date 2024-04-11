@@ -8,6 +8,8 @@ export async function getQuiz(id) {
   return await instance.get(`api/quizzes/${id}`)
 }
 
-export async function getSimilarQuizzes(id) {
-  return await instance.get(`api/quizzes/${id}/similar`)
+export async function getSimilarQuizzes(categoryIds, excludeId) {
+  return await instance.get(`api/similar-quizzes`, {
+    params: { categoryIds, excludeId }
+  })
 }
