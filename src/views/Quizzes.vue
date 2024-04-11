@@ -18,10 +18,9 @@ export default {
     }
   },
   async mounted() {
+    this.isLoading = true
     try {
-      this.isLoading = true
-      const { data } = await getCategories(['Music', 'Movies'])
-
+      const { data } = await getCategories()
       this.$store.dispatch('categories/setAllCategories', data)
     } catch (err) {
       this.$store.dispatch('toast/setToast', {

@@ -27,8 +27,15 @@
           class="hidden sm:flex sm:items-center sm:gap-2"
           to="/quizzes"
         >
-          <div v-if="activeQuizPage" class="w-3 h-3 bg-blue-main rounded-full"></div>
-          <h1>Quizzes</h1>
+          <h1
+            :class="{
+              'before:w-2 before:h-2 before:absolute before:bg-blue-main before:rounded-full before:top-1/2 before:-translate-y-1/2 before:right-full before:mr-2':
+                $route.path.includes('quizzes')
+            }"
+            class="relative"
+          >
+            Quizzes
+          </h1>
         </RouterLink>
       </div>
 

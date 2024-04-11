@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import Quizzes from '@/views/Quizzes.vue'
+import Quiz from '@/views/Quiz.vue'
 import Authorization from '@/views/Authorization.vue'
 import Signup from '@/components/auth/Signup.vue'
 import Login from '@/components/auth/Login.vue'
@@ -8,7 +9,6 @@ import Forgot from '@/components/auth/Forgot.vue'
 import Reset from '@/components/auth/Reset.vue'
 import TheHeader from '@/components/ui/TheHeader.vue'
 import TheFooter from '@/components/ui/TheFooter.vue'
-
 import store from '@/store/index'
 
 const router = createRouter({
@@ -25,12 +25,28 @@ const router = createRouter({
     },
     {
       path: '/quizzes',
-      name: 'quizzes',
-      components: {
-        header: TheHeader,
-        default: Quizzes,
-        footer: TheFooter
-      }
+
+      children: [
+        {
+          path: '',
+          name: 'quizzes',
+          components: {
+            header: TheHeader,
+            default: Quizzes,
+            footer: TheFooter
+          }
+        },
+        {
+          path: '/quizzes/:quizId',
+          props: true,
+          name: 'showQuiz',
+          components: {
+            header: TheHeader,
+            default: Quiz,
+            footer: TheFooter
+          }
+        }
+      ]
     },
     {
       path: '/auth',

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLoading" class="flex justify-center items-center mt-6">
+  <div v-if="isLoading" class="flex justify-center items-center my-6">
     <LoadingSpinner />
   </div>
 
@@ -11,6 +11,7 @@
       <QuizCardItem
         v-for="quiz in quizzes"
         :key="quiz.id"
+        :id="quiz.id"
         :title="quiz.title"
         :categories="quiz.categories"
         :difficultyLevel="quiz.difficulty_level"
@@ -43,25 +44,13 @@ export default {
       isLoading: false
     }
   },
-  watch: {
-    '$route.query': {
-      immediate: true,
-      handler(newValue, oldValue) {
-        if (newValue !== oldValue) {
-          this.fetchQuizzes(newValue)
-        }
-      }
-    }
-  },
   methods: {
     async fetchQuizzes(query) {
+      this.isLoading = true
       try {
-        this.isLoading = true
-
         const {
           data: { data: quizzes }
         } = await getQuizzes(query)
-
         this.quizzes = quizzes
       } catch (err) {
         this.$store.dispatch('toast/setToast', {
@@ -74,6 +63,14 @@ export default {
         this.isLoading = false
       }
     }
+  },
+  watch: {
+    $route(value) {
+      this.fetchQuizzes(value.query)
+    }
+  },
+  mounted() {
+    this.fetchQuizzes()
   }
 }
 </script>
