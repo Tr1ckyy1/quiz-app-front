@@ -14,7 +14,12 @@
         <GoBack />
         <p>Back</p>
       </button>
-      <AuthModal title="Reset password" description="Already have an account?" descr-span="Log in">
+      <AuthModal
+        title="Reset password"
+        description="Already have an account?"
+        descr-span="Log in"
+        mode="reset"
+      >
         <Form @submit="onSubmit" class="space-y-4" :validation-schema="schema" v-slot="{ errors }">
           <BaseInput
             name="password"

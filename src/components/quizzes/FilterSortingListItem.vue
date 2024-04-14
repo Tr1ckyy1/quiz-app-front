@@ -1,15 +1,19 @@
 <template>
-  <li class="flex items-center gap-4 pl-2">
-    <slot></slot
-    ><span @click="setSortBy" class="cursor-pointer group text-[#475467]" :class="activeSort">{{
-      name
-    }}</span>
+  <li
+    @click="setSortBy"
+    class="flex items-center gap-4 py-2 px-3 rounded-lg cursor-pointer"
+    :class="activeSort"
+  >
+    <slot></slot><span class="group text-[#475467]">{{ name }}</span>
+    <CheckmarkIcon v-if="getSortBy === name" class="ml-auto" />
   </li>
 </template>
 
 <script>
+import CheckmarkIcon from '@/icons/CheckmarkIcon.vue'
 export default {
   props: ['name'],
+  components: { CheckmarkIcon },
   methods: {
     setSortBy() {
       this.$store.dispatch('filter/setSort', this.getSortBy === this.name ? '' : this.name)
@@ -21,8 +25,8 @@ export default {
     },
     activeSort() {
       return this.getSortBy === this.name
-        ? 'underline font-extrabold'
-        : 'sm:hover:underline font-semibold'
+        ? 'bg-[#D9D9D933] font-extrabold'
+        : 'sm:hover:bg-[#D9D9D933] font-semibold'
     }
   },
   mounted() {

@@ -18,6 +18,7 @@
       <AuthModal
         title="Forgot password?"
         description="Don't worry! It happens. Please enter the email associated with your account."
+        mode="forgot"
       >
         <Form @submit="onSubmit" class="space-y-4" :validation-schema="schema" v-slot="{ errors }">
           <BaseInput

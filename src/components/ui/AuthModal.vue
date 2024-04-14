@@ -1,14 +1,17 @@
 <template>
   <section class="py-14 px-6 space-y-10 bg-white">
     <div class="text-center space-y-6 sm:text-left">
-      <h1 class="font-extrabold text-2xl font-raleway sm:text-4xl">{{ title }}</h1>
+      <div class="flex justify-center sm:justify-start items-center gap-2">
+        <h1 class="font-extrabold text-2xl font-raleway sm:text-4xl">{{ title }}</h1>
+        <img src="@/assets/welcome-wave.png" class="object-cover" />
+      </div>
 
-      <p :class="{ hidden: !title.includes('Reset') }">Please type something you'll remember</p>
+      <p :class="{ hidden: mode !== 'reset' }">Please type something you'll remember</p>
       <p
         class="block"
         :class="{
-          'sm:hidden': !title.includes('Forgot'),
-          hidden: title.includes('Reset')
+          'sm:hidden ': mode !== 'forgot',
+          hidden: mode === 'reset'
         }"
       >
         {{ description }}
@@ -18,7 +21,7 @@
       </p>
     </div>
     <slot></slot>
-    <p v-if="!title.includes('Forgot')" class="hidden sm:block">
+    <p v-if="mode !== 'forgot'" class="hidden sm:block">
       {{ description }}
       <RouterLink :to="goTo" class="text-blue-main font-bold">
         {{ descrSpan }}
@@ -42,6 +45,10 @@ export default {
       type: String,
       required: false,
       default: ''
+    },
+    mode: {
+      type: String,
+      required: false
     }
   },
   computed: {

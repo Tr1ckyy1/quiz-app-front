@@ -10,6 +10,7 @@ import Reset from '@/components/auth/Reset.vue'
 import TheHeader from '@/components/ui/TheHeader.vue'
 import TheFooter from '@/components/ui/TheFooter.vue'
 import store from '@/store/index'
+import QuizTest from '@/views/QuizTest.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,7 +26,6 @@ const router = createRouter({
     },
     {
       path: '/quizzes',
-
       children: [
         {
           path: '',
@@ -45,6 +45,11 @@ const router = createRouter({
             default: Quiz,
             footer: TheFooter
           }
+        },
+        {
+          path: '/quizzes/:quizId/test',
+          component: QuizTest,
+          props: true
         }
       ]
     },
