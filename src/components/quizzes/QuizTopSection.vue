@@ -36,7 +36,7 @@
       <div class="sm:ml-auto relative">
         <div
           @click.stop="toggleFilter"
-          class="relative w-fit my-4 sm:my-0 flex items-center gap-4 border border-[#66708599] p-2.5 rounded-xl outline-none shrink-0 group sm:hover:border-blue-main transition-colors sm:duration-300 sm:hover:bg-blue-main/10 sm:cursor-pointer"
+          class="relative w-fit my-4 sm:my-0 flex items-center gap-4 border border-[#66708599] p-2.5 rounded-xl outline-none shrink-0 group sm:hover:border-blue-main transition-colors sm:duration-150 sm:hover:bg-blue-main/10 sm:cursor-pointer"
           :class="{ 'border-2 border-black': filteredItemsTotal.length > 0 }"
         >
           <div
@@ -50,8 +50,13 @@
             </div>
           </div>
 
-          <FilterIcon class="sm:group-hover:fill-blue-main sm:duration-300" />
-          <p class="sm:group-hover:text-blue-main sm:duration-300">Filter</p>
+          <FilterIcon class="sm:group-hover:fill-blue-main sm:duration-150" />
+          <p
+            class="sm:group-hover:text-blue-main sm:duration-150"
+            :class="{ 'font-semibold': filteredItemsTotal.length > 0 }"
+          >
+            Filter
+          </p>
         </div>
         <Transition
           enter-active-class="duration-300"
