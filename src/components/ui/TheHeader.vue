@@ -163,7 +163,7 @@ export default {
               search: this.search
             }
           })
-        }, 1000)
+        }, 500)
       }
     }
   },
