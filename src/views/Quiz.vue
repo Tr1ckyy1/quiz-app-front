@@ -33,9 +33,22 @@
               </h1>
             </div>
             <p>{{ quiz?.intro_question }}</p>
-            <QuizShowDescription class="hidden sm:block" :duration="quiz?.duration" />
+            <QuizShowDescription
+              class="hidden sm:block"
+              :totalQuestions="quiz?.total_questions"
+              :totalPoints="quiz?.total_points"
+              :duration="quiz?.duration"
+              :players="quiz?.total_users"
+            />
+            <p
+              class="hidden sm:block text-red-500 font-bold text-2xl pt-2"
+              v-if="quiz?.user_completed"
+            >
+              You have already completed this quiz!
+            </p>
             <RouterLink
-              to="/"
+              v-else
+              :to="startQuiz"
               class="hidden sm:inline-block bg-blue-main w-2/3 text-white font-semibold py-3 px-6 text-center rounded-[10px] outline-none hover:brightness-95"
               >Start quiz</RouterLink
             >
@@ -49,9 +62,18 @@
           <p>{{ quiz?.instructions }}</p>
         </div>
       </div>
-      <QuizShowDescription class="block sm:hidden" :duration="quiz?.duration" />
+      <QuizShowDescription
+        class="block sm:hidden"
+        :totalQuestions="quiz?.total_questions"
+        :totalPoints="quiz?.total_points"
+        :duration="quiz?.duration"
+      />
+      <p class="block sm:hidden text-red-500 font-bold text-2xl" v-if="quiz?.user_completed">
+        You have already completed this quiz!
+      </p>
       <RouterLink
-        to="/"
+        v-else
+        :to="startQuiz"
         class="block sm:hidden bg-blue-main w-full text-white font-semibold py-3 px-6 text-center rounded-[10px]"
         >Start quiz</RouterLink
       >
@@ -62,16 +84,7 @@
         v-else-if="!similarQuizzesLoading && similarQuizzes?.length > 0"
         class="basis-1/3 mt-4 hidden sm:block space-y-10"
       >
-        <QuizCardItem
-          mode="similar"
-          v-for="quiz in similarQuizzes"
-          :key="quiz.id"
-          :id="quiz.id"
-          :title="quiz.title"
-          :categories="quiz.categories"
-          :difficultyLevel="quiz.difficulty_level"
-          :duration="quiz.duration"
-        />
+        <QuizCardItem mode="similar" v-for="quiz in similarQuizzes" :key="quiz.id" :quiz="quiz" />
       </ul>
     </div>
   </section>
@@ -94,6 +107,11 @@ export default {
       quiz: null,
       similarQuizzes: [],
       similarQuizzesLoading: false
+    }
+  },
+  computed: {
+    startQuiz() {
+      return `/quizzes/${this.quizId}/test`
     }
   },
   watch: {

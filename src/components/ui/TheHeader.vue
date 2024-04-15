@@ -208,7 +208,7 @@ export default {
         await logoutApi()
 
         this.$store.dispatch('auth/logout')
-        this.$router.replace('/auth/login')
+        this.$router.push('/auth/login')
       } catch (err) {
         this.$store.dispatch('toast/setToast', {
           type: 'error',

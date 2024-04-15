@@ -7,7 +7,7 @@
   >
     <div
       v-if="toast.isShowing"
-      class="flex items-center z-[120] gap-6 w-[340px] fixed top-4 right-1/2 translate-x-1/2 sm:-translate-x-0 sm:right-12 font-raleway py-3 rounded-lg px-8 bg-gradient-to-r to-[#242C32] to-35% overflow-hidden"
+      class="flex items-center z-[999] gap-6 w-[340px] fixed top-4 right-1/2 translate-x-1/2 sm:-translate-x-0 sm:right-12 font-raleway py-3 rounded-lg px-8 bg-gradient-to-r to-[#242C32] to-35% overflow-hidden"
       :class="design"
     >
       <div v-if="toast.type === 'success'" class="bg-toast-green/10 p-1 rounded-full">

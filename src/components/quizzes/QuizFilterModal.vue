@@ -1,6 +1,6 @@
 <template>
-  <Form
-    @submit="onSubmit"
+  <form
+    @submit.prevent="onSubmit"
     ref="formRef"
     class="fixed inset-0 bg-gray-100 sm:bg-white z-[350] sm:z-[250] overflow-y-scroll sm:absolute sm:inset-auto sm:w-[70rem] sm:top-full sm:overflow-hidden sm:mt-2 sm:-right-0 sm:border sm:border-black sm:rounded-xl sm:p-4 sm:-shadow-sm"
   >
@@ -86,8 +86,33 @@
         <div class="space-y-4" v-show="activeElement === 'filter'">
           <div v-if="isAuthenticated" class="space-y-6">
             <h2 class="hidden sm:block text-blue-main font-semibold">Filter by</h2>
-            <FilterCheckbox name="my_quizzes" title="My quizzes" />
-            <FilterCheckbox name="not_completed" title="Not completed" />
+            <div class="flex items-center gap-4">
+              <label class="font-semibold" for="filter-my-quizzes">My quizzes</label>
+              <div class="relative flex items-center justify-center">
+                <input
+                  v-model="myQuizzesChecked"
+                  name="my_quizzes"
+                  type="checkbox"
+                  id="filter-my-quizzes"
+                  class="peer appearance-none h-5 w-5 border-2 rounded-md checked:border-[#7F56D9] checked:bg-[#F9F5FF] outline-none sm:checked:bg-black sm:checked:border-black"
+                />
+                <FilterCheckbox select="filter-my-quizzes" />
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <label class="font-semibold" for="filter-not-completed">Not completed</label>
+              <div class="relative flex items-center justify-center">
+                <input
+                  v-model="notCompletedChecked"
+                  name="not_completed"
+                  type="checkbox"
+                  id="filter-not-completed"
+                  class="peer appearance-none h-5 w-5 border-2 rounded-md checked:border-[#7F56D9] checked:bg-[#F9F5FF] outline-none sm:checked:bg-black sm:checked:border-black"
+                />
+                <FilterCheckbox select="filter-not-completed" />
+              </div>
+            </div>
           </div>
 
           <div class="border-y py-4 space-y-6">
@@ -138,48 +163,45 @@
         <FilterSorting />
       </ul>
     </div>
-  </Form>
+  </form>
 </template>
 
 <script>
 import SearchIcon from '@/icons/SearchIcon.vue'
 import CancelIcon from '@/icons/CancelIcon.vue'
 import FilterIcon from '@/icons/FilterIcon.vue'
-import FilterCheckbox from './FilterCheckbox.vue'
 import FilterSorting from './FilterSorting.vue'
 import QuizLevelItem from './QuizLevelItem.vue'
 import QuizCategoryItem from './QuizCategoryItem.vue'
-import { Form, Field } from 'vee-validate'
 import { getDifficultyLevels } from '@/services/api/levels'
+import FilterCheckbox from './FilterCheckbox.vue'
 
 export default {
   emits: ['close'],
   props: ['isShowing', 'names'],
   components: {
-    Form,
-    Field,
     SearchIcon,
     CancelIcon,
     FilterIcon,
-    FilterCheckbox,
     FilterSorting,
     QuizLevelItem,
-    QuizCategoryItem
+    QuizCategoryItem,
+    FilterCheckbox
   },
 
   data() {
     return {
       search: '',
       activeElement: 'filter',
-      categoriesSelected: false,
-      levels: []
+      levels: [],
+      myQuizzesChecked: false,
+      notCompletedChecked: false
     }
   },
   methods: {
-    onSubmit(values) {
+    onSubmit() {
       const categories = this.$store.getters['filter/getCategoriesInFilter']
       const levels = this.$store.getters['filter/getLevelsInFilter']
-
       // Filter out duplicate values before building the query string
       const uniqueFiltersCategories = [...new Set([...categories])]
       const uniqueFiltersLevels = [...new Set([...levels])]
@@ -189,32 +211,26 @@ export default {
           ...this.$route.query,
           categories: uniqueFiltersCategories.join('&'),
           levels: uniqueFiltersLevels.join('&'),
-          sort: this.getSortBy
+          sort: this.getSortBy,
+          my_quizzes: this.myQuizzesChecked,
+          not_completed: this.notCompletedChecked
         }
       })
       this.$emit('close')
     },
     customReset() {
-      const formRef = this.$refs.formRef
-      formRef.resetForm()
+      const { categories, levels, sort, my_quizzes, not_completed } = this.$route.query
+
       this.search = ''
       this.activeElement = 'filter'
-      this.$store.dispatch('filter/setAllCategories', [])
-      this.$store.dispatch('filter/setAllLevels', [])
-      this.addFromUrlAfterReset()
-    },
-    addFromUrlAfterReset() {
-      const { categories, levels } = this.$route.query
-      if (categories) {
-        this.$store.dispatch('filter/setAllCategories', categories.split('&'))
-      }
-      if (levels) {
-        this.$store.dispatch('filter/setAllLevels', levels.split('&'))
-      }
-      this.$store.dispatch('filter/setSort', this.$route.query.sort)
+      this.$store.dispatch('filter/setAllCategories', categories ? categories.split('&') : [])
+      this.$store.dispatch('filter/setAllLevels', levels ? levels.split('&') : [])
+      this.$store.dispatch('filter/setSort', sort ?? '')
+      this.myQuizzesChecked = my_quizzes
+      this.notCompletedChecked = not_completed
     },
     handleClickOutside(e) {
-      if (this.$refs.formRef?.$el && !this.$refs.formRef?.$el?.contains(e.target)) {
+      if (this.$refs.formRef && !this.$refs.formRef?.contains(e.target)) {
         this.$emit('close')
       }
     }
@@ -251,17 +267,28 @@ export default {
       return this.$store.getters['filter/getSortBy']
     },
     showButtons() {
-      const formRef = this.$refs.formRef
+      const categoriesInFilter = this.$store.getters['filter/getCategoriesInFilter']
+      const levelsInFilter = this.$store.getters['filter/getLevelsInFilter']
+
+      const { categories, levels, sort, my_quizzes, not_completed } = this.$route.query
+      const urlCategories = categories ? categories.split('&') : []
+      const urlLevels = levels ? levels.split('&') : []
+      const categoriesChanged = JSON.stringify(categoriesInFilter) !== JSON.stringify(urlCategories)
+      const levelsChanged = JSON.stringify(levelsInFilter) !== JSON.stringify(urlLevels)
+      const sortChanged = this.getSortBy !== (sort || '')
+      const myQuizzesChanged = this.myQuizzesChecked !== (my_quizzes ?? false)
+      const notCompletedChanged = this.notCompletedChecked !== (not_completed ?? false)
       return (
-        this.$store.getters['filter/getCategoriesInFilter'].length > 0 ||
-        this.$store.getters['filter/getLevelsInFilter'].length > 0 ||
-        (formRef && formRef.values.my_quizzes) ||
-        (formRef && formRef.values.not_completed) ||
-        this.getSortBy
+        categoriesChanged || levelsChanged || sortChanged || myQuizzesChanged || notCompletedChanged
       )
     }
   },
+
   async mounted() {
+    const { my_quizzes, not_completed } = this.$route.query
+
+    if (my_quizzes) this.myQuizzesChecked = my_quizzes
+    if (not_completed) this.notCompletedChecked = not_completed
     document.addEventListener('click', this.handleClickOutside)
 
     try {

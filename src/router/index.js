@@ -10,6 +10,8 @@ import Reset from '@/components/auth/Reset.vue'
 import TheHeader from '@/components/ui/TheHeader.vue'
 import TheFooter from '@/components/ui/TheFooter.vue'
 import store from '@/store/index'
+import QuizTest from '@/views/QuizTest.vue'
+import ErrorPage from '@/views/ErrorPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,7 +27,6 @@ const router = createRouter({
     },
     {
       path: '/quizzes',
-
       children: [
         {
           path: '',
@@ -37,7 +38,7 @@ const router = createRouter({
           }
         },
         {
-          path: '/quizzes/:quizId',
+          path: ':quizId',
           props: true,
           name: 'showQuiz',
           components: {
@@ -45,6 +46,11 @@ const router = createRouter({
             default: Quiz,
             footer: TheFooter
           }
+        },
+        {
+          path: ':quizId/test',
+          component: QuizTest,
+          props: true
         }
       ]
     },
@@ -71,6 +77,16 @@ const router = createRouter({
         }
       ],
       meta: { requiresUnAuth: true }
+    },
+    {
+      name: 'error',
+      path: '/error/:status',
+      components: {
+        header: TheHeader,
+        default: ErrorPage,
+        footer: TheFooter
+      },
+      props: true
     }
   ],
   scrollBehavior(_, _1, savedPosition) {

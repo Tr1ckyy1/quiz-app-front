@@ -14,7 +14,12 @@
         <GoBack />
         <p>Back</p>
       </button>
-      <AuthModal title="Hi, Welcome!" description="Don't have an account?" descr-span="Sign up">
+      <AuthModal
+        title="Hi, Welcome!"
+        description="Don't have an account?"
+        descr-span="Sign up"
+        mode="login"
+      >
         <Form @submit="onSubmit" class="space-y-4" :validation-schema="schema" v-slot="{ errors }">
           <BaseInput
             name="email"
