@@ -152,7 +152,9 @@ export default {
         })
         this.finishedQuizData = data
       } catch (err) {
-        this.$router.replace('/quizzes')
+        if (err.response.data.error) {
+          this.$router.replace('/quizzes')
+        }
         this.$store.dispatch('toast/setToast', {
           type: 'error',
           text: 'Error',
