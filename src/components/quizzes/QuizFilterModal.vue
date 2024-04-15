@@ -87,28 +87,32 @@
           <div v-if="isAuthenticated" class="space-y-6">
             <h2 class="hidden sm:block text-blue-main font-semibold">Filter by</h2>
             <div class="flex items-center gap-4">
-              <label class="font-semibold" for="filter-my-quizzes">My quizzes</label>
+              <label class="font-semibold sm:cursor-pointer" for="filter-my-quizzes"
+                >My quizzes</label
+              >
               <div class="relative flex items-center justify-center">
                 <input
                   v-model="myQuizzesChecked"
                   name="my_quizzes"
                   type="checkbox"
                   id="filter-my-quizzes"
-                  class="peer appearance-none h-5 w-5 border-2 rounded-md checked:border-[#7F56D9] checked:bg-[#F9F5FF] outline-none sm:checked:bg-black sm:checked:border-black"
+                  class="sm:cursor-pointer peer appearance-none h-5 w-5 border-2 rounded-md checked:border-[#7F56D9] checked:bg-[#F9F5FF] outline-none sm:checked:bg-black sm:checked:border-black"
                 />
                 <FilterCheckbox select="filter-my-quizzes" />
               </div>
             </div>
 
             <div class="flex items-center gap-4">
-              <label class="font-semibold" for="filter-not-completed">Not completed</label>
+              <label class="font-semibold sm:cursor-pointer" for="filter-not-completed"
+                >Not completed</label
+              >
               <div class="relative flex items-center justify-center">
                 <input
                   v-model="notCompletedChecked"
                   name="not_completed"
                   type="checkbox"
                   id="filter-not-completed"
-                  class="peer appearance-none h-5 w-5 border-2 rounded-md checked:border-[#7F56D9] checked:bg-[#F9F5FF] outline-none sm:checked:bg-black sm:checked:border-black"
+                  class="sm:cursor-pointer peer appearance-none h-5 w-5 border-2 rounded-md checked:border-[#7F56D9] checked:bg-[#F9F5FF] outline-none sm:checked:bg-black sm:checked:border-black"
                 />
                 <FilterCheckbox select="filter-not-completed" />
               </div>

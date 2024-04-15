@@ -5,7 +5,9 @@
       class="group flex flex-col shadow-lg p-6 gap-3 cursor-pointer sm:duration-300"
       :class="checkSimilarQuizzes"
     >
-      <img src="@/assets/card-for-test.png" />
+      <div>
+        <img :src="quiz.image" class="rounded-lg aspect-[3/2] object-cover" />
+      </div>
       <ul class="flex flex-wrap gap-6">
         <li
           v-for="(category, index) in quiz.categories"

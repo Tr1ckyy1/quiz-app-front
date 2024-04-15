@@ -54,7 +54,7 @@
             >
           </div>
           <div>
-            <img src="@/assets/astronaut.png" class="h-full object-cover rounded-[20px]" />
+            <img :src="quiz?.image" class="aspect-[3/2] object-cover rounded-[20px]" />
           </div>
         </div>
         <div class="hidden sm:block border-t mt-10 pt-6 space-y-2">
