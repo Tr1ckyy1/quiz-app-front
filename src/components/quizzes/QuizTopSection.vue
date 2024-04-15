@@ -37,23 +37,23 @@
         <div
           @click.stop="toggleFilter"
           class="relative w-fit my-4 sm:my-0 flex items-center gap-4 border border-[#66708599] p-2.5 rounded-xl outline-none shrink-0 group sm:hover:border-blue-main transition-colors sm:duration-150 sm:hover:bg-blue-main/10 sm:cursor-pointer"
-          :class="{ 'border-2 border-black': filteredItemsTotal.length > 0 }"
+          :class="{ 'border-2 border-black': filteredItemsTotal > 0 }"
         >
           <div
-            v-if="filteredItemsTotal.length > 0"
+            v-if="filteredItemsTotal > 0"
             class="absolute w-6 h-6 bg-white left-full -translate-x-1/2 top-0 -translate-y-1/2 flex items-center justify-center"
           >
             <div
               class="h-5 w-5 rounded-full bg-black flex items-center justify-center text-white text-xs font-bold shrink-0"
             >
-              {{ filteredItemsTotal.length }}
+              {{ filteredItemsTotal }}
             </div>
           </div>
 
           <FilterIcon class="sm:group-hover:fill-blue-main sm:duration-150" />
           <p
             class="sm:group-hover:text-blue-main sm:duration-150"
-            :class="{ 'font-semibold': filteredItemsTotal.length > 0 }"
+            :class="{ 'font-semibold': filteredItemsTotal > 0 }"
           >
             Filter
           </p>
@@ -159,7 +159,7 @@ export default {
       if (sort) arrayTotal.push(sort)
       if (loggedIn && my_quizzes && my_quizzes === 'true') arrayTotal.push(my_quizzes)
       if (loggedIn && not_completed && not_completed === 'true') arrayTotal.push(not_completed)
-      return arrayTotal
+      return arrayTotal.length
     }
   }
 }

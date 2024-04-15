@@ -21,3 +21,7 @@ export async function getSimilarQuizzes(categoryIds, excludeId) {
 export async function submitQuiz(data) {
   return await instance.post(`api/submit-quiz`, data)
 }
+
+export async function getFooterInfo() {
+  return await instance.get('api/quizwiz-info')
+}

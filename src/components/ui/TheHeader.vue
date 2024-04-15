@@ -70,7 +70,14 @@
           v-if="userLoggedIn"
           class="hidden sm:flex w-8 h-8 rounded-full border items-center justify-center cursor-pointer shrink-0 relative"
         >
-          <Avatar />
+          <div v-if="!userDataLoading && userCredentials?.profile_image" class="shrink-0 h-10 w-10">
+            <img
+              :src="userCredentials?.profile_image"
+              class="rounded-full w-full h-full object-cover"
+            />
+          </div>
+          <Avatar v-else-if="!userDataLoading && !userCredentials?.profile_image" />
+
           <Transition
             enter-active-class="duration-100 ease-in-out"
             leave-active-class="duration-100 ease-in-out"
@@ -82,7 +89,11 @@
               class="absolute border cursor-default border-[#D0D5DD] bg-white right-0 top-0 rounded-lg shadow-md p-8 space-y-5"
               ref="credentialsModal"
             >
-              <div class="w-10 h-10 bg-gray-500 rounded-full shrink-0"></div>
+              <img
+                v-if="userCredentials?.profile_image"
+                :src="userCredentials?.profile_image"
+                class="rounded-full h-10 w-10 object-cover shrink-0 border-dotted border"
+              />
               <div>
                 <h1 class="font-bold">{{ userCredentials?.username }}</h1>
                 <div class="flex gap-20 items-center justify-between">
@@ -137,7 +148,8 @@ export default {
       credentialsModalOpen: false,
       search: '',
       userCredentials: null,
-      debounceTimer: null
+      debounceTimer: null,
+      userDataLoading: false
     }
   },
   watch: {
@@ -151,7 +163,7 @@ export default {
               search: this.search
             }
           })
-        }, 1000)
+        }, 500)
       }
     }
   },
@@ -178,13 +190,18 @@ export default {
       }
     },
     async getUser() {
+      this.userDataLoading = true
       try {
         const {
-          data: { email, username }
+          data: {
+            data: { email, username, profile_image }
+          }
         } = await getUserApi()
+
         this.userCredentials = {
           email,
-          username
+          username,
+          profile_image
         }
       } catch (err) {
         if (err?.response?.status === 401) {
@@ -199,6 +216,8 @@ export default {
           message: err.message,
           duration: 5000
         })
+      } finally {
+        this.userDataLoading = false
       }
     },
     async logout() {
