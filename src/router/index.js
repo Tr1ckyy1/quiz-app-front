@@ -79,6 +79,7 @@ const router = createRouter({
       meta: { requiresUnAuth: true }
     },
     {
+      name: 'error',
       path: '/error/:status',
       components: {
         header: TheHeader,
