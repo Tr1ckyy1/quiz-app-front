@@ -35,7 +35,7 @@
           <div v-if="userCredentials?.profile_image" class="shrink-0 h-14 w-14">
             <img
               :src="userCredentials?.profile_image"
-              class="rounded-full w-full h-full object-cover shrink-0"
+              class="rounded-full w-full h-full object-cover"
             />
           </div>
           <div>
