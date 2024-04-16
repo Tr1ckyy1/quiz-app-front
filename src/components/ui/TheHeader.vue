@@ -92,7 +92,7 @@
               <img
                 v-if="userCredentials?.profile_image"
                 :src="userCredentials?.profile_image"
-                class="rounded-full h-10 w-10 object-cover shrink-0 border-dotted border"
+                class="rounded-full h-12 w-12 object-cover shrink-0 border-dotted border"
               />
               <div>
                 <h1 class="font-bold">{{ userCredentials?.username }}</h1>

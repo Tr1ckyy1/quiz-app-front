@@ -32,7 +32,12 @@
       </div>
       <div v-else>
         <div class="flex items-center gap-6 border-b py-4">
-          <div class="w-14 h-14 bg-gray-500 rounded-full shrink-0"></div>
+          <div v-if="userCredentials?.profile_image" class="shrink-0 h-14 w-14">
+            <img
+              :src="userCredentials?.profile_image"
+              class="rounded-full w-full h-full object-cover"
+            />
+          </div>
           <div>
             <h1 class="font-bold">{{ userCredentials?.username }}</h1>
             <p>{{ userCredentials?.email }}</p>
