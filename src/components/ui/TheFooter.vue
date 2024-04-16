@@ -20,8 +20,18 @@
       </div>
       <div class="space-y-8">
         <h1 class="font-bold">Social media</h1>
-        <a :href="footerInfo?.facebook" class="text-footer-grey block" target="_blank">Facebook</a>
-        <a :href="footerInfo?.linkedin" class="text-footer-grey block" target="_blank">Linkedin</a>
+        <a
+          :href="footerInfo?.facebook"
+          class="text-footer-grey block sm:hover:underline sm:cursor-pointer"
+          target="_blank"
+          >Facebook</a
+        >
+        <a
+          :href="footerInfo?.linkedin"
+          class="text-footer-grey block sm:hover:underline sm:cursor-pointer"
+          target="_blank"
+          >Linkedin</a
+        >
       </div>
     </section>
     <p

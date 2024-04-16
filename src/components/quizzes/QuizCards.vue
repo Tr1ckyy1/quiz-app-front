@@ -13,7 +13,7 @@
     <p class="px-4 sm:px-24 mb-20 font-bold text-2xl" v-else>No available quizzes</p>
     <button
       v-if="showLoadMoreButton"
-      @click="this.fetchQuizzes()"
+      @click="this.loadMore()"
       class="flex items-center rounded-lg py-3 px-5 bg-[#1018280D] hover:brightness-90 gap-3 mx-auto mb-14"
     >
       <LoadMoreIcon />
@@ -42,17 +42,22 @@ export default {
       this.isLoading = true
       try {
         const { data } = await getQuizzes({ ...this.$route.query, page: this.currentPage })
-
-        this.quizzes.push(...data.data)
-        this.currentPage++
-        this.showLoadMoreButton = data.meta.last_page >= this.currentPage
+        this.quizzes = data.data
+        this.showLoadMoreButton = data.meta.last_page > this.currentPage
       } catch (err) {
         console.log(err)
       } finally {
         this.isLoading = false
       }
+    },
+    async loadMore() {
+      this.currentPage++
+      const { data } = await getQuizzes({ ...this.$route.query, page: this.currentPage })
+      this.quizzes.push(...data.data)
+      this.showLoadMoreButton = data.meta.last_page > this.currentPage
     }
   },
+
   watch: {
     '$route.query': {
       immediate: true,
