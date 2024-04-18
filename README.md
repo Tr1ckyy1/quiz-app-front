@@ -53,3 +53,7 @@ npm run dev
 ```sh
 npm run lint
 ```
+
+### BACKEND
+
+<a href="https://github.com/RedberryInternship/api-quizwiz-omar-jangavadze">Quizwiz Backend</a>
