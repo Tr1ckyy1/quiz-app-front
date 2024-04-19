@@ -3,7 +3,7 @@
     <div class="text-center space-y-6 sm:text-left">
       <div class="flex justify-center sm:justify-start items-center gap-2">
         <h1 class="font-extrabold text-2xl font-raleway sm:text-4xl">{{ title }}</h1>
-        <img src="@/assets/welcome-wave.png" class="object-cover" />
+        <img v-if="mode === 'login'" src="@/assets/welcome-wave.png" class="object-cover" />
       </div>
 
       <p :class="{ hidden: mode !== 'reset' }">Please type something you'll remember</p>
