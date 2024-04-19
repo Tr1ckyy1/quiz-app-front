@@ -17,7 +17,13 @@
     <LoadingSpinner />
   </div>
 
-  <Form v-else @submit="submitQuiz" class="pb-10" v-slot="{ values }" ref="formRef">
+  <Form
+    v-else-if="!isLoading && quiz"
+    @submit="submitQuiz"
+    class="pb-10"
+    v-slot="{ values }"
+    ref="formRef"
+  >
     <header
       class="p-4 sm:px-24 top-0 w-full sticky bg-white z-[300] space-y-4 sm:space-y-0 shadow-md sm:shadow-none sm:border-b sm:py-6"
     >
@@ -40,7 +46,7 @@
       </div>
     </header>
     <div class="space-y-6 my-8 sm:my-14">
-      <h1 class="text-center text-4xl font-bold">{{ quiz?.title }} alo alo alo alo alo</h1>
+      <h1 class="text-center text-4xl font-bold">{{ quiz?.title }}</h1>
       <ul class="flex gap-4 justify-center items-center flex-wrap px-10">
         <PinIcon />
         <li
