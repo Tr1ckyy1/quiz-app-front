@@ -2,7 +2,7 @@
   <div v-if="isLoading" class="flex justify-center items-center my-6 h-full">
     <LoadingSpinner />
   </div>
-  <section v-else class="px-4 sm:px-24 py-6">
+  <section v-else-if="!isLoading && quiz" class="px-4 sm:px-24 py-6">
     <button
       class="hidden sm:flex items-center gap-1 hover:underline duration-100"
       @click="$router.go(-1)"
