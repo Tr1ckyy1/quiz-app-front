@@ -230,8 +230,9 @@ export default {
       this.$store.dispatch('filter/setAllCategories', categories ? categories.split('&') : [])
       this.$store.dispatch('filter/setAllLevels', levels ? levels.split('&') : [])
       this.$store.dispatch('filter/setSort', sort ?? '')
-      this.myQuizzesChecked = my_quizzes
-      this.notCompletedChecked = not_completed
+
+      this.myQuizzesChecked = my_quizzes !== undefined ? my_quizzes : false
+      this.notCompletedChecked = not_completed !== undefined ? not_completed : false
     },
     handleClickOutside(e) {
       if (this.$refs.formRef && !this.$refs.formRef?.contains(e.target)) {
@@ -281,8 +282,16 @@ export default {
         JSON.stringify(categoriesInFilter.toSorted()) !== JSON.stringify(urlCategories)
       const levelsChanged = JSON.stringify(levelsInFilter.toSorted()) !== JSON.stringify(urlLevels)
       const sortChanged = this.getSortBy !== (sort || '')
-      const myQuizzesChanged = String(this.myQuizzesChecked) !== (my_quizzes ?? false)
-      const notCompletedChanged = String(this.notCompletedChecked) !== (not_completed ?? false)
+
+      const myQuizzesChanged =
+        my_quizzes !== undefined
+          ? String(this.myQuizzesChecked) !== my_quizzes
+          : this.myQuizzesChecked !== false
+
+      const notCompletedChanged =
+        not_completed !== undefined
+          ? String(this.notCompletedChecked) !== not_completed
+          : this.notCompletedChecked !== false
 
       return (
         categoriesChanged || levelsChanged || sortChanged || myQuizzesChanged || notCompletedChanged
