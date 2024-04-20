@@ -275,13 +275,15 @@ export default {
       const levelsInFilter = this.$store.getters['filter/getLevelsInFilter']
 
       const { categories, levels, sort, my_quizzes, not_completed } = this.$route.query
-      const urlCategories = categories ? categories.split('&') : []
-      const urlLevels = levels ? levels.split('&') : []
-      const categoriesChanged = JSON.stringify(categoriesInFilter) !== JSON.stringify(urlCategories)
-      const levelsChanged = JSON.stringify(levelsInFilter) !== JSON.stringify(urlLevels)
+      const urlCategories = categories ? categories.split('&').sort() : []
+      const urlLevels = levels ? levels.split('&').sort() : []
+      const categoriesChanged =
+        JSON.stringify(categoriesInFilter.toSorted()) !== JSON.stringify(urlCategories)
+      const levelsChanged = JSON.stringify(levelsInFilter.toSorted()) !== JSON.stringify(urlLevels)
       const sortChanged = this.getSortBy !== (sort || '')
-      const myQuizzesChanged = this.myQuizzesChecked !== (my_quizzes ?? false)
-      const notCompletedChanged = this.notCompletedChecked !== (not_completed ?? false)
+      const myQuizzesChanged = String(this.myQuizzesChecked) !== (my_quizzes ?? false)
+      const notCompletedChanged = String(this.notCompletedChecked) !== (not_completed ?? false)
+
       return (
         categoriesChanged || levelsChanged || sortChanged || myQuizzesChanged || notCompletedChanged
       )
