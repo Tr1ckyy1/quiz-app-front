@@ -212,8 +212,14 @@ export default {
         }
         this.$store.dispatch('toast/setToast', {
           type: 'error',
-          text: err?.response?.data?.message || 'Unexpected Error',
-          message: err.message,
+          text:
+            err?.response?.status === 401
+              ? `${err?.response?.status} ${err?.response?.data?.message}`
+              : 'Unexpected Error',
+          message:
+            err?.response?.status === 401
+              ? `Your authentication token may have expired. Please try logging in again.`
+              : err.message,
           duration: 5000
         })
       } finally {
