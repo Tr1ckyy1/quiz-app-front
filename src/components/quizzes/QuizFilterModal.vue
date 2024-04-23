@@ -307,7 +307,9 @@ export default {
     document.addEventListener('click', this.handleClickOutside)
 
     try {
-      const { data } = await getDifficultyLevels()
+      const {
+        data: { data }
+      } = await getDifficultyLevels()
       this.levels = data
     } catch (err) {
       this.$store.dispatch('toast/setToast', {

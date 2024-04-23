@@ -20,7 +20,9 @@ export default {
   async mounted() {
     this.isLoading = true
     try {
-      const { data } = await getCategories()
+      const {
+        data: { data }
+      } = await getCategories()
       this.$store.dispatch('categories/setAllCategories', data)
     } catch (err) {
       this.$store.dispatch('toast/setToast', {
