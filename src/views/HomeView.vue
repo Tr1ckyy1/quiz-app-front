@@ -12,23 +12,23 @@
 
     <div class="-mt-32 w-full z-20 sm:mt-28 sm:z-0">
       <div class="bg-red-main w-full p-14 sm:px-24">
-        <h1 class="font-black text-white text-4xl sm:text-5xl flex flex-col gap-2 font-raleway">
+        <h1 class="font-black text-white text-[80px] flex flex-col gap-5 font-raleway">
           200+
           <RouterLink
             to="/quizzes"
-            class="flex underline items-center gap-4 sm:no-underline sm:hover:underline sm:duration-150"
-            >Quiz games <ArrowUpIcon
+            class="flex underline items-center gap-4 sm:no-underline sm:hover:underline sm:duration-150 text-5xl"
+            >Quiz games <ArrowUpIcon class="sm:hidden"
           /></RouterLink>
         </h1>
       </div>
 
       <div class="p-14 bg-blue-main w-full sm:px-24">
-        <h1 class="font-black text-white text-4xl flex flex-col gap-2 font-raleway sm:text-5xl">
+        <h1 class="font-black text-white flex flex-col gap-5 font-raleway text-[80px]">
           250+
           <RouterLink
             to="/quizzes"
-            class="flex underline items-center gap-4 sm:no-underline sm:hover:underline sm:duration-150"
-            >Different genre <ArrowUpIcon />
+            class="flex underline items-center gap-4 sm:no-underline sm:hover:underline sm:duration-150 text-5xl"
+            >Different genre <ArrowUpIcon class="sm:hidden" />
           </RouterLink>
         </h1>
       </div>
