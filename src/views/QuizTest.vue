@@ -47,7 +47,7 @@
     </header>
     <div class="space-y-6 my-8 sm:my-14">
       <h1 class="text-center text-4xl font-bold">{{ quiz?.title }}</h1>
-      <ul class="flex gap-4 justify-center items-center flex-wrap px-10">
+      <ul class="flex gap-x-4 gap-y-2 justify-center items-center flex-wrap px-10">
         <PinIcon />
         <li
           v-for="(category, index) in quiz?.categories"

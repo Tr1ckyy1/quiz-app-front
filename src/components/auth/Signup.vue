@@ -61,8 +61,8 @@
                 <label for="accept_terms">
                   <svg
                     class="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
-                    width="16"
-                    height="16"
+                    width="14"
+                    height="14"
                     viewBox="0 0 13 11"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"

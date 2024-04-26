@@ -15,7 +15,7 @@
         <div class="space-y-4 sm:space-y-0 sm:flex sm:mt-4 sm:gap-10">
           <div class="sm:space-y-6 space-y-4">
             <div class="flex flex-col gap-3 sm:flex-col-reverse">
-              <ul class="flex gap-4 flex-wrap">
+              <ul class="flex gap-x-4 gap-y-2 flex-wrap">
                 <li
                   v-for="(category, index) in quiz?.categories"
                   :key="category.id"

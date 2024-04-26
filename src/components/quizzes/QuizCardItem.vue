@@ -2,13 +2,13 @@
   <li>
     <RouterLink
       :to="{ name: 'showQuiz', params: { quizId: quiz.id } }"
-      class="group flex flex-col shadow-lg p-6 gap-3 cursor-pointer sm:duration-300"
+      class="group h-full flex flex-col shadow-lg p-6 gap-3 cursor-pointer sm:duration-300"
       :class="checkSimilarQuizzes"
     >
       <div>
         <img :src="quiz.image" class="rounded-lg aspect-[3/2] object-cover" />
       </div>
-      <ul class="flex flex-wrap gap-6">
+      <ul class="flex flex-wrap gap-x-6 gap-y-2">
         <li
           v-for="(category, index) in quiz.categories"
           :key="category.id"
@@ -22,7 +22,7 @@
         </li>
       </ul>
       <div class="flex items-center justify-between">
-        <h1 class="font-semibold text-lg">{{ quiz.title }}</h1>
+        <h1 class="font-semibold text-2xl">{{ quiz.title }}</h1>
         <LinkIcon class="hidden group-hover:block" />
       </div>
       <div class="flex gap-6 flex-wrap">
@@ -112,7 +112,7 @@ export default {
     checkSimilarQuizzes() {
       return this.mode === 'similar'
         ? 'bg-[#D0D5DD]/20 border border-[#D0D5DD] rounded-lg sm:hover:border-black active:border-black'
-        : 'sm:hover:ring-1 rounded-xl sm:hover:ring-black  active:ring-1 active:ring-black'
+        : 'sm:hover:ring-1 sm:hover:rounded-xl sm:hover:ring-black  active:ring-1 active:ring-black'
     },
     userLoggedIn() {
       return this.$store.getters['auth/isAuthenticated'] && this.quiz.user_completed
