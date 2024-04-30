@@ -182,7 +182,7 @@ export default {
             message: err.response.data.message,
             duration: 5000
           })
-          if (err.response.data.message.includes('token')) {
+          if (err.response.data.message.includes('expired')) {
             this.resendButton.isShowing = true
           }
         }
