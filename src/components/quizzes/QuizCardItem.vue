@@ -2,11 +2,11 @@
   <li>
     <RouterLink
       :to="{ name: 'showQuiz', params: { quizId: quiz.id } }"
-      class="group h-full flex flex-col shadow-lg p-6 gap-3 cursor-pointer sm:duration-300"
+      class="group h-full flex flex-col p-6 gap-3 cursor-pointer sm:duration-300"
       :class="checkSimilarQuizzes"
     >
       <div>
-        <img :src="quiz.image" class="rounded-lg aspect-[3/2] object-cover" />
+        <img :src="quiz.image" class="rounded-lg w-full max-h-60 object-cover" />
       </div>
       <ul class="flex flex-wrap gap-x-6 gap-y-2">
         <li
@@ -112,7 +112,7 @@ export default {
     checkSimilarQuizzes() {
       return this.mode === 'similar'
         ? 'bg-[#D0D5DD]/20 border border-[#D0D5DD] rounded-lg sm:hover:border-black active:border-black'
-        : 'sm:hover:ring-1 sm:hover:rounded-xl sm:hover:ring-black  active:ring-1 active:ring-black'
+        : 'sm:hover:ring-1 sm:hover:rounded-xl sm:hover:ring-black  active:ring-1 active:ring-black shadow-lg'
     },
     userLoggedIn() {
       return this.$store.getters['auth/isAuthenticated'] && this.quiz.user_completed

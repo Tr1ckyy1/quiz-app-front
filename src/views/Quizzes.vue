@@ -1,6 +1,6 @@
 <template>
   <div v-if="isLoading" class="flex justify-center items-center mt-6">
-    <LoadingSpinner />
+    <LoadingSpinner class="text-gray-200" />
   </div>
   <QuizTopSection v-else />
   <QuizCards />

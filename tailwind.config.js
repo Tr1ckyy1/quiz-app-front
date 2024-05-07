@@ -18,7 +18,8 @@ export default {
         'toast-yellow': '#FFD21F',
         'toast-red': '#F04349',
         'filter-grey': '#D0D5DD',
-        'description-grey': '#667085'
+        'description-grey': '#667085',
+        'skeleton-grey': '#F6F6F7'
       },
       keyframes: {
         progress: {

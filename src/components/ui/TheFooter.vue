@@ -1,6 +1,6 @@
 <template>
   <div v-if="isLoading" class="flex items-center justify-center mt-10">
-    <LoadingSpinner />
+    <LoadingSpinner class="text-gray-200" />
   </div>
   <footer v-else class="sm:z-20 sm:bg-white relative py-6 border-t">
     <section

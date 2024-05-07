@@ -14,7 +14,7 @@
   </Transition>
   <ToastMessage :toast="toast" />
   <div v-if="isLoading" class="flex items-center justify-center h-screen">
-    <LoadingSpinner />
+    <LoadingSpinner class="text-gray-200" />
   </div>
 
   <Form
