@@ -58,7 +58,7 @@
             class="w-10 h-10 rounded-full shrink-0 flex items-center justify-center"
             :style="{ 'background-color': quiz.difficulty_level.bg_color_normal }"
           >
-            <component :is="difficultyLevelIcon" />
+            <DifficultyLevelIcon :stroke="quiz.difficulty_level.color" />
           </div>
           <div class="text-sm">
             <h2 class="font-semibold">Difficulty level</h2>
@@ -87,12 +87,8 @@ import LinkIcon from '@/icons/LinkIcon.vue'
 import QuizCompletedIcon from '@/icons/QuizCompletedIcon.vue'
 import QuizNotCompletedIcon from '@/icons/QuizNotCompletedIcon.vue'
 import PointsIcon from '@/icons/PointsIcon.vue'
-import LevelStarter from '@/icons/levels/LevelStarter.vue'
-import LevelBeginner from '@/icons/levels/LevelBeginner.vue'
-import LevelMiddle from '@/icons/levels/LevelMiddle.vue'
-import LevelHigh from '@/icons/levels/LevelHigh.vue'
-import LevelVeryHigh from '@/icons/levels/LevelVeryHigh.vue'
-import LevelDangerouslyHigh from '@/icons/levels/LevelDangerouslyHigh.vue'
+import DifficultyLevelIcon from '@/icons/DifficultyLevelIcon.vue'
+
 export default {
   props: ['quiz', 'mode'],
 
@@ -101,12 +97,7 @@ export default {
     QuizCompletedIcon,
     QuizNotCompletedIcon,
     PointsIcon,
-    LevelStarter,
-    LevelBeginner,
-    LevelMiddle,
-    LevelHigh,
-    LevelVeryHigh,
-    LevelDangerouslyHigh
+    DifficultyLevelIcon
   },
   computed: {
     checkSimilarQuizzes() {
@@ -128,25 +119,6 @@ export default {
         year: 'numeric'
       })
       return formattedDate
-    },
-    difficultyLevelIcon() {
-      const difficultyName = this.quiz.difficulty_level.name.toLowerCase()
-      switch (difficultyName) {
-        case 'starter':
-          return 'LevelStarter'
-        case 'beginner':
-          return 'LevelBeginner'
-        case 'middle':
-          return 'LevelMiddle'
-        case 'high':
-          return 'LevelHigh'
-        case 'very high':
-          return 'LevelVeryHigh'
-        case 'dangerously high':
-          return 'LevelDangerouslyHigh'
-        default:
-          return ''
-      }
     }
   }
 }
