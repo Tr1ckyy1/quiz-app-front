@@ -1,6 +1,6 @@
 <template>
   <div v-if="isLoading" class="flex justify-center items-center my-6">
-    <LoadingSpinner />
+    <LoadingSpinner class="text-gray-200" />
   </div>
 
   <section v-else>

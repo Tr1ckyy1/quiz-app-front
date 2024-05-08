@@ -1,12 +1,34 @@
 <template>
   <div
-    class="fixed inset-0 bg-[#101828B2] z-[998] grid backdrop-blur px-4 overflow-y-scroll scrollbar-none"
+    class="fixed inset-0 bg-[#101828B2] z-[998] grid backdrop-blur px-4 overflow-y-scroll scrollbar-none overscroll-contain"
     @click.self="$emit('close')"
   >
     <div class="w-full bg-white rounded-xl shadow-sm p-6 max-w-96 place-self-center">
-      <div v-if="modalLoading" class="flex items-center justify-center gap-4">
-        <LoadingSpinner />
-        <h1 class="font-semibold text-blue-main">Analyzing results</h1>
+      <div class="space-y-8" v-if="modalLoading">
+        <div class="flex items-center justify-center gap-4">
+          <LoadingSpinner class="text-white" />
+          <h1 class="font-semibold text-blue-main">Analyzing results</h1>
+        </div>
+        <div class="space-y-2">
+          <div class="w-full h-7 bg-skeleton-grey"></div>
+          <div class="w-full h-7 bg-skeleton-grey"></div>
+        </div>
+        <div class="space-y-2">
+          <div class="w-full h-7 bg-skeleton-grey"></div>
+          <div class="w-full h-7 bg-skeleton-grey"></div>
+        </div>
+        <div class="space-y-2">
+          <div class="w-full h-7 bg-skeleton-grey"></div>
+          <div class="w-full h-7 bg-skeleton-grey"></div>
+        </div>
+        <div class="space-y-2">
+          <div class="w-full h-7 bg-skeleton-grey"></div>
+          <div class="w-full h-7 bg-skeleton-grey"></div>
+        </div>
+        <div class="space-y-2">
+          <div class="w-full h-7 bg-skeleton-grey"></div>
+          <div class="w-full h-7 bg-skeleton-grey"></div>
+        </div>
       </div>
       <div v-else class="space-y-4">
         <div class="space-y-2 flex flex-col items-center">

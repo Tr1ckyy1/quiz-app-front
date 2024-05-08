@@ -1,6 +1,6 @@
 <template>
   <div v-if="isLoading" class="flex justify-center items-center my-6 h-full">
-    <LoadingSpinner />
+    <LoadingSpinner class="text-gray-200" />
   </div>
   <section v-else-if="!isLoading && quiz" class="px-4 sm:px-24 py-6">
     <button
@@ -53,8 +53,8 @@
               >Start quiz</RouterLink
             >
           </div>
-          <div>
-            <img :src="quiz?.image" class="aspect-[3/2] object-cover rounded-[20px]" />
+          <div class="w-full h-80">
+            <img :src="quiz?.image" class="w-full h-full object-cover rounded-[20px]" />
           </div>
         </div>
         <div class="hidden sm:block border-t mt-10 pt-6 space-y-2">
@@ -78,7 +78,7 @@
         >Start quiz</RouterLink
       >
       <div v-if="similarQuizzesLoading" class="flex basis-1/3 items-center justify-center">
-        <LoadingSpinner />
+        <LoadingSpinner class="text-gray-200" />
       </div>
       <ul
         v-else-if="!similarQuizzesLoading && similarQuizzes?.length > 0"
