@@ -119,25 +119,6 @@ export default {
         year: 'numeric'
       })
       return formattedDate
-    },
-    difficultyLevelIcon() {
-      const difficultyName = this.quiz.difficulty_level.name.toLowerCase()
-      switch (difficultyName) {
-        case 'starter':
-          return 'LevelStarter'
-        case 'beginner':
-          return 'LevelBeginner'
-        case 'middle':
-          return 'LevelMiddle'
-        case 'high':
-          return 'LevelHigh'
-        case 'very high':
-          return 'LevelVeryHigh'
-        case 'dangerously high':
-          return 'LevelDangerouslyHigh'
-        default:
-          return ''
-      }
     }
   }
 }
