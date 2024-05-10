@@ -67,6 +67,7 @@
         :totalQuestions="quiz?.total_questions"
         :totalPoints="quiz?.total_points"
         :duration="quiz?.duration"
+        :players="quiz?.total_users"
       />
       <p class="block sm:hidden text-red-500 font-bold text-2xl" v-if="quiz?.user_completed">
         You have already completed this quiz!

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed inset-0 bg-[#101828B2] z-[998] grid backdrop-blur px-4 overflow-y-scroll scrollbar-none overscroll-contain"
+    class="fixed inset-0 bg-[#101828B2] z-[998] grid backdrop-blur px-4 overflow-y-scroll scrollbar-none no-scroll"
     @click.self="$emit('close')"
   >
     <div class="w-full bg-white rounded-xl shadow-sm p-6 max-w-96 place-self-center">
