@@ -127,9 +127,9 @@ export default {
         const {
           data: { data: quiz }
         } = await getQuizApi(id)
+        if (!quiz.total_questions > 0) this.$router.replace('/quizzes')
         this.quiz = quiz
         const categoryIds = quiz.categories.map((category) => category.id)
-
         this.getSimilarQuizzes(categoryIds, quiz.id)
       } catch (err) {
         console.log(err)

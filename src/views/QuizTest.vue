@@ -46,7 +46,9 @@
       </div>
     </header>
     <div class="space-y-6 my-8 sm:my-14">
-      <h1 class="text-center text-4xl font-bold">{{ quiz?.title }}</h1>
+      <h1 class="text-center text-4xl font-bold px-10">
+        {{ quiz?.title }}
+      </h1>
       <ul class="flex gap-x-4 gap-y-2 justify-center items-center flex-wrap px-10">
         <PinIcon />
         <li
@@ -177,6 +179,7 @@ export default {
         const {
           data: { data: quiz }
         } = await getQuizApi(id, true)
+        if (!quiz.total_questions > 0 || quiz.user_completed) this.$router.replace('/quizzes')
         this.quiz = quiz
         this.totalTime = quiz.duration * 60
         this.startTimer()
@@ -200,13 +203,6 @@ export default {
       if (this.timer) {
         clearInterval(this.timer)
         this.timer = null
-      }
-    }
-  },
-  watch: {
-    quiz(val) {
-      if (val.user_completed) {
-        this.$router.replace('/quizzes')
       }
     }
   },
