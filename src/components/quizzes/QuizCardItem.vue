@@ -1,5 +1,5 @@
 <template>
-  <li>
+  <li v-if="quiz.total_questions > 0">
     <RouterLink
       :to="{ name: 'showQuiz', params: { quizId: quiz.id } }"
       class="group h-full flex flex-col p-6 gap-3 cursor-pointer sm:duration-300"
