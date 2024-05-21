@@ -79,7 +79,7 @@
         />
       </ul>
       <div
-        class="hidden w-96 h-fit pt-14 px-10 pb-6 shadow-lg relative rounded-lg border sm:flex flex-col items-center justify-center gap-8"
+        class="hidden w-96 h-fit pt-14 px-10 pb-6 shadow-lg fixed right-[5%] rounded-lg border sm:flex flex-col items-center justify-center gap-8"
       >
         <div
           class="absolute rounded-lg shadow-lg py-4 border -translate-x-1/2 -translate-y-1/2 top-0 left-1/2 z-10 bg-white px-10"
